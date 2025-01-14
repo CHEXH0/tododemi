@@ -64,10 +64,15 @@ const Index = () => {
           <p className="mt-3 text-lg text-gray-500">
             Create your personal profile and share your story with others!
           </p>
+          <p className="mt-2 text-sm text-gray-400 md:hidden">
+            Please use a desktop device to access the drawing features.
+          </p>
         </div>
 
-        <CanvasArea position="left" onSave={(dataUrl) => handleCanvasSave("left", dataUrl)} />
-        <CanvasArea position="right" onSave={(dataUrl) => handleCanvasSave("right", dataUrl)} />
+        <div className="hidden md:block">
+          <CanvasArea position="left" onSave={(dataUrl) => handleCanvasSave("left", dataUrl)} />
+          <CanvasArea position="right" onSave={(dataUrl) => handleCanvasSave("right", dataUrl)} />
+        </div>
 
         <Card className="p-6 bg-white/80 backdrop-blur-sm">
           <PersonalInfoForm onNameChange={handleNameChange} onSubmit={handleSubmit} />
