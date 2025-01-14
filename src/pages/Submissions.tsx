@@ -13,7 +13,7 @@ interface Submission extends Omit<SubmissionRow, 'canvas_data'> {
   canvas_data: Record<string, { drawings: string[]; images: string[]; }>;
 }
 
-export const Submissions = () => {
+const Submissions = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const navigate = useNavigate();
 
@@ -188,3 +188,5 @@ export const Submissions = () => {
     </div>
   );
 };
+
+export default Submissions;
