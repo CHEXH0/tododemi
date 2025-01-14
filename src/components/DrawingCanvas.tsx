@@ -88,13 +88,14 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
     const previousState = canvasHistory[canvasHistory.length - 2];
     fabricCanvas.clear();
     
-    // Load the previous state as an image instead of SVG
-    fabric.Image.fromURL(previousState, (img) => {
+    fabric.Image.fromURL(previousState, {
+      crossOrigin: 'anonymous',
+      scaleX: fabricCanvas.width! / fabricCanvas.width!,
+      scaleY: fabricCanvas.height! / fabricCanvas.height!,
+    }).then((img) => {
       if (!fabricCanvas) return;
-      fabricCanvas.setBackgroundImage(img, fabricCanvas.renderAll.bind(fabricCanvas), {
-        scaleX: fabricCanvas.width! / img.width!,
-        scaleY: fabricCanvas.height! / img.height!,
-      });
+      fabricCanvas.backgroundImage = img;
+      fabricCanvas.renderAll();
     });
     
     setCanvasHistory(prev => prev.slice(0, -1));
