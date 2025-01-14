@@ -1,90 +1,142 @@
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ImagePlus, Paintbrush, X } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Paintbrush, Image as ImageIcon } from "lucide-react";
+import { CanvasArea } from "@/components/CanvasArea";
 import { ImageUpload } from "@/components/ImageUpload";
-import { DrawingCanvas } from "@/components/DrawingCanvas";
-
-interface MediaContent {
-  drawings: string[];
-  images: string[];
-}
 
 interface InputWithFeaturesProps {
   label: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   type?: string;
   isTextarea?: boolean;
-  shape: string;
-  mediaContent: MediaContent;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  shape?: string;
+  mediaContent: {
+    drawings: string[];
+    images: string[];
+  };
   onDrawingSave: (dataUrl: string) => void;
   onImageUpload: (dataUrl: string) => void;
+  onMediaDelete?: (type: "drawing" | "image", index: number) => void;
 }
 
 export const InputWithFeatures = ({
   label,
   name,
   value,
-  onChange,
   type = "text",
-  isTextarea = false,
+  isTextarea,
+  onChange,
   shape,
   mediaContent,
   onDrawingSave,
-  onImageUpload
+  onImageUpload,
+  onMediaDelete,
 }: InputWithFeaturesProps) => {
-  const InputComponent = isTextarea ? Textarea : Input;
+  const [isDrawingOpen, setIsDrawingOpen] = useState(false);
+  const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
+
+  const handleDrawingSave = (dataUrl: string) => {
+    onDrawingSave(dataUrl);
+    setIsDrawingOpen(false);
+  };
+
+  const handleImageUpload = (dataUrl: string) => {
+    onImageUpload(dataUrl);
+    setIsImageUploadOpen(false);
+  };
+
+  const handleDelete = (type: "drawing" | "image", index: number) => {
+    if (onMediaDelete) {
+      onMediaDelete(type, index);
+    }
+  };
 
   return (
-    <div className={`space-y-4 p-6 mb-8 shadow-lg ${shape} animate-fade-in`}>
-      <Label htmlFor={name} className="text-white font-bold text-lg">{label}</Label>
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700">{label}</label>
       <div className="flex gap-2">
-        <div className="flex-1 bg-white/90 rounded-lg p-2">
-          <InputComponent
-            id={name}
+        {isTextarea ? (
+          <Textarea
             name={name}
             value={value}
             onChange={onChange}
-            placeholder={`Your ${label.toLowerCase()}`}
-            type={type}
-            className={`${isTextarea ? "min-h-[100px]" : ""} bg-transparent`}
+            className="min-h-[100px]"
+            placeholder={`Enter your ${label.toLowerCase()}`}
           />
-        </div>
-        <Dialog>
+        ) : (
+          <Input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={`Enter your ${label.toLowerCase()}`}
+          />
+        )}
+        <Dialog open={isDrawingOpen} onOpenChange={setIsDrawingOpen}>
           <DialogTrigger asChild>
-            <Button variant="secondary" size="icon" className="flex-shrink-0 hover:bg-white/20">
+            <Button variant="outline" size="icon">
               <Paintbrush className="h-4 w-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl">
-            <DrawingCanvas onSave={onDrawingSave} />
+          <DialogContent className="sm:max-w-[800px]">
+            <CanvasArea position="left" onSave={handleDrawingSave} />
           </DialogContent>
         </Dialog>
-        <Dialog>
+        <Dialog open={isImageUploadOpen} onOpenChange={setIsImageUploadOpen}>
           <DialogTrigger asChild>
-            <Button variant="secondary" size="icon" className="flex-shrink-0 hover:bg-white/20">
-              <ImageIcon className="h-4 w-4" />
+            <Button variant="outline" size="icon">
+              <ImagePlus className="h-4 w-4" />
             </Button>
           </DialogTrigger>
           <DialogContent>
-            <ImageUpload onUpload={onImageUpload} />
+            <ImageUpload onUpload={handleImageUpload} />
           </DialogContent>
         </Dialog>
       </div>
       {(mediaContent.drawings.length > 0 || mediaContent.images.length > 0) && (
-        <div className="grid grid-cols-2 gap-4 mt-4 bg-white/90 p-4 rounded-lg">
-          {mediaContent.drawings.map((drawing, idx) => (
-            <img key={`drawing-${idx}`} src={drawing} alt={`Drawing for ${label}`} className="w-full rounded-lg" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+          {mediaContent.drawings.map((drawing, index) => (
+            <div key={`drawing-${index}`} className="relative group">
+              <img
+                src={drawing}
+                alt={`Drawing ${index + 1}`}
+                className="w-full h-32 object-cover rounded-lg border border-gray-200"
+              />
+              <Button
+                variant="destructive"
+                size="icon"
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleDelete("drawing", index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           ))}
-          {mediaContent.images.map((image, idx) => (
-            <img key={`image-${idx}`} src={image} alt={`Image for ${label}`} className="w-full rounded-lg" />
+          {mediaContent.images.map((image, index) => (
+            <div key={`image-${index}`} className="relative group">
+              <img
+                src={image}
+                alt={`Image ${index + 1}`}
+                className="w-full h-32 object-cover rounded-lg border border-gray-200"
+              />
+              <Button
+                variant="destructive"
+                size="icon"
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleDelete("image", index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           ))}
         </div>
       )}
+      {shape && <div className="mt-2 text-sm text-gray-500">{shape}</div>}
     </div>
   );
 };
