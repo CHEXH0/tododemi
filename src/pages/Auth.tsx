@@ -16,10 +16,7 @@ const Auth = () => {
       if (event === "SIGNED_IN" && session) {
         navigate("/");
       }
-      if (event === "USER_UPDATED") {
-        setErrorMessage("");
-      }
-      if (event === "SIGNED_OUT") {
+      if (event === "USER_UPDATED" || event === "SIGNED_OUT") {
         setErrorMessage("");
       }
     });
@@ -27,22 +24,26 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleError = (error: AuthError) => {
-    if (error instanceof AuthApiError) {
-      switch (error.message) {
-        case "User already registered":
-          setErrorMessage("This email is already registered. Please try logging in instead.");
-          break;
-        case "Invalid login credentials":
-          setErrorMessage("Invalid email or password. Please check your credentials and try again.");
-          break;
-        default:
-          setErrorMessage(error.message);
-      }
-    } else {
-      setErrorMessage(error.message);
-    }
-  };
+  useEffect(() => {
+    const handleAuthError = () => {
+      supabase.auth.getSession().then(({ data: { session }, error }) => {
+        if (error instanceof AuthApiError) {
+          switch (error.message) {
+            case "User already registered":
+              setErrorMessage("This email is already registered. Please try logging in instead.");
+              break;
+            case "Invalid login credentials":
+              setErrorMessage("Invalid email or password. Please check your credentials and try again.");
+              break;
+            default:
+              setErrorMessage(error.message);
+          }
+        }
+      });
+    };
+
+    handleAuthError();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
