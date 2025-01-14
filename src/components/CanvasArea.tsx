@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { fabric } from "fabric";
+import * as fabric from "fabric";
 import { Button } from "@/components/ui/button";
 import { Paintbrush, Square, Circle as CircleIcon, Eraser, Download } from "lucide-react";
 import { toast } from "sonner";

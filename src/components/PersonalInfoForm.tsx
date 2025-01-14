@@ -15,12 +15,34 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit }: PersonalInfoFormPro
     dreams: "",
   });
 
+  const [mediaContent, setMediaContent] = useState<Record<string, { drawings: string[]; images: string[]; }>>({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (name === 'name' && onNameChange) {
       onNameChange(value);
     }
+  };
+
+  const handleDrawingSave = (fieldName: string, dataUrl: string) => {
+    setMediaContent(prev => ({
+      ...prev,
+      [fieldName]: {
+        drawings: [...(prev[fieldName]?.drawings || []), dataUrl],
+        images: prev[fieldName]?.images || []
+      }
+    }));
+  };
+
+  const handleImageUpload = (fieldName: string, dataUrl: string) => {
+    setMediaContent(prev => ({
+      ...prev,
+      [fieldName]: {
+        drawings: prev[fieldName]?.drawings || [],
+        images: [...(prev[fieldName]?.images || []), dataUrl]
+      }
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,6 +70,9 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit }: PersonalInfoFormPro
           {...field}
           onChange={handleChange}
           shape={shapes[field.name as keyof typeof shapes]}
+          mediaContent={mediaContent[field.name] || { drawings: [], images: [] }}
+          onDrawingSave={(dataUrl) => handleDrawingSave(field.name, dataUrl)}
+          onImageUpload={(dataUrl) => handleImageUpload(field.name, dataUrl)}
         />
       ))}
 
