@@ -98,16 +98,14 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     
     try {
       const previousState = canvasHistory[canvasHistory.length - 2] || canvasHistory[0];
-      // Update to use the correct LoadImageOptions type
-      fabric.Image.fromURL(previousState, {
-        scaleX: fabricCanvas.getWidth() / fabricCanvas.getWidth(),
-        scaleY: fabricCanvas.getHeight() / fabricCanvas.getHeight(),
-        crossOrigin: 'anonymous',
-        onload: (img: fabric.Image) => {
-          fabricCanvas.clear();
-          fabricCanvas.add(img);
-          fabricCanvas.renderAll();
-        }
+      fabric.Image.fromURL(previousState, (img) => {
+        const scale = fabricCanvas.getWidth() / img.width!;
+        img.scale(scale);
+        fabricCanvas.clear();
+        fabricCanvas.add(img);
+        fabricCanvas.renderAll();
+      }, {
+        crossOrigin: 'anonymous'
       });
       setCanvasHistory(prev => prev.slice(0, -1));
     } catch (error) {
