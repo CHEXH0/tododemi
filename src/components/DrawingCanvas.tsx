@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { Button } from "@/components/ui/button";
-import { Paintbrush, Square, Circle as CircleIcon, Eraser, Undo, Download } from "lucide-react";
+import { Paintbrush, Square, Circle as CircleIcon, Eraser, Undo, Download, Plus, Minus } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 
 interface DrawingCanvasProps {
@@ -13,6 +14,8 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
   const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | null>(null);
   const [activeColor, setActiveColor] = useState("#000000");
   const [activeTool, setActiveTool] = useState<"draw" | "rectangle" | "circle" | "eraser">("draw");
+  const [brushSize, setBrushSize] = useState(2);
+  const [canvasHistory, setCanvasHistory] = useState<string[]>([]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -25,10 +28,19 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
     });
 
     canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-    canvas.freeDrawingBrush.width = 2;
+    canvas.freeDrawingBrush.width = brushSize;
     canvas.freeDrawingBrush.color = activeColor;
     
     setFabricCanvas(canvas);
+    setCanvasHistory([canvas.toDataURL()]);
+
+    canvas.on('object:added', () => {
+      setCanvasHistory(prev => [...prev, canvas.toDataURL()]);
+    });
+
+    canvas.on('object:modified', () => {
+      setCanvasHistory(prev => [...prev, canvas.toDataURL()]);
+    });
 
     return () => {
       canvas.dispose();
@@ -42,9 +54,9 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
     
     if (fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.color = activeTool === "eraser" ? "#ffffff" : activeColor;
-      fabricCanvas.freeDrawingBrush.width = activeTool === "eraser" ? 20 : 2;
+      fabricCanvas.freeDrawingBrush.width = activeTool === "eraser" ? brushSize * 2 : brushSize;
     }
-  }, [activeTool, activeColor, fabricCanvas]);
+  }, [activeTool, activeColor, brushSize, fabricCanvas]);
 
   const handleToolClick = (tool: typeof activeTool) => {
     setActiveTool(tool);
@@ -54,8 +66,8 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
         left: 100,
         top: 100,
         fill: activeColor,
-        width: 50,
-        height: 50,
+        width: 50 * (brushSize / 2),
+        height: 50 * (brushSize / 2),
       });
       fabricCanvas?.add(rect);
     } else if (tool === "circle") {
@@ -63,10 +75,31 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
         left: 100,
         top: 100,
         fill: activeColor,
-        radius: 25,
+        radius: 25 * (brushSize / 2),
       });
       fabricCanvas?.add(circle);
     }
+  };
+
+  const handleUndo = () => {
+    if (!fabricCanvas || canvasHistory.length <= 1) return;
+    
+    const previousState = canvasHistory[canvasHistory.length - 2];
+    fabric.loadSVGFromString(previousState, (objects) => {
+      if (!fabricCanvas) return;
+      fabricCanvas.clear();
+      if (Array.isArray(objects)) {
+        objects.forEach((obj) => {
+          if (obj instanceof fabric.Object) {
+            fabricCanvas.add(obj);
+          }
+        });
+      }
+      fabricCanvas.renderAll();
+    });
+    
+    setCanvasHistory(prev => prev.slice(0, -1));
+    toast("Action undone!");
   };
 
   const handleClear = () => {
@@ -74,6 +107,7 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
     fabricCanvas.clear();
     fabricCanvas.backgroundColor = "#ffffff";
     fabricCanvas.renderAll();
+    setCanvasHistory([fabricCanvas.toDataURL()]);
     toast("Canvas cleared!");
   };
 
@@ -127,15 +161,45 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
             <Eraser className="h-4 w-4" />
           </Button>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={() => setBrushSize(Math.max(1, brushSize - 1))}
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+          <Slider
+            value={[brushSize]}
+            onValueChange={(value) => setBrushSize(value[0])}
+            min={1}
+            max={20}
+            step={1}
+            className="w-24"
+          />
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={() => setBrushSize(Math.min(20, brushSize + 1))}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
           <input
             type="color"
             value={activeColor}
             onChange={(e) => setActiveColor(e.target.value)}
             className="w-8 h-8 rounded cursor-pointer"
           />
-          <Button variant="outline" size="icon" onClick={handleClear}>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleUndo}
+            disabled={canvasHistory.length <= 1}
+          >
             <Undo className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleClear}>
+            Clear
           </Button>
           <Button variant="outline" size="icon" onClick={handleSave}>
             <Download className="h-4 w-4" />
