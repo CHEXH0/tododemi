@@ -45,17 +45,15 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     if (!fabricCanvas || canvasHistory.length <= 1) return;
     
     const previousState = canvasHistory[canvasHistory.length - 2];
-    fabric.loadSVGFromString(previousState, (objects) => {
+    fabricCanvas.clear();
+    
+    // Load the previous state as an image instead of SVG
+    fabric.Image.fromURL(previousState, (img) => {
       if (!fabricCanvas) return;
-      fabricCanvas.clear();
-      if (Array.isArray(objects)) {
-        objects.forEach((obj) => {
-          if (obj instanceof fabric.Object) {
-            fabricCanvas.add(obj);
-          }
-        });
-      }
-      fabricCanvas.renderAll();
+      fabricCanvas.setBackgroundImage(img, fabricCanvas.renderAll.bind(fabricCanvas), {
+        scaleX: fabricCanvas.width! / img.width!,
+        scaleY: fabricCanvas.height! / img.height!,
+      });
     });
     
     setCanvasHistory(prev => prev.slice(0, -1));
