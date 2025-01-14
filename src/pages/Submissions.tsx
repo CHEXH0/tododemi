@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 
 interface Submission {
   id: string;
   name: string;
+  age: string;
+  country: string;
+  languages: string;
+  hobbies: string;
+  dreams: string;
   created_at: string;
   canvas_data: any;
   user_id: string;
@@ -14,6 +21,7 @@ interface Submission {
 export const Submissions = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSubmissions();
@@ -61,35 +69,86 @@ export const Submissions = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Student Submissions</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Student Submissions</h1>
+        <Button 
+          onClick={() => navigate("/")}
+          variant="outline"
+          className="hover:bg-purple-100"
+        >
+          Create New Submission
+        </Button>
+      </div>
+      
+      <div className="grid grid-cols-1 gap-8">
         {submissions.map((submission) => (
-          <div key={submission.id} className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="text-xl font-semibold mb-2">{submission.name}</h2>
-            <p className="text-gray-500 mb-4">
-              {new Date(submission.created_at).toLocaleDateString()}
-            </p>
-            {submission.canvas_data && (
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                {Object.values(submission.canvas_data).map((dataUrl: string, index: number) => (
-                  <img
-                    key={index}
-                    src={dataUrl}
-                    alt={`Canvas ${index + 1}`}
-                    className="w-full rounded-lg"
-                  />
-                ))}
+          <Card key={submission.id} className="p-6 bg-white rounded-lg shadow-lg">
+            <div className="space-y-6">
+              <div className="flex justify-between items-start">
+                <h2 className="text-2xl font-semibold text-purple-600">{submission.name}'s Story</h2>
+                <div className="text-sm text-gray-500">
+                  {new Date(submission.created_at).toLocaleDateString()}
+                </div>
               </div>
-            )}
-            {(currentUser === submission.user_id) && (
-              <Button
-                variant="destructive"
-                onClick={() => handleDelete(submission.id, submission.user_id)}
-              >
-                Delete
-              </Button>
-            )}
-          </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-700">Age</h3>
+                    <p className="text-gray-600">{submission.age}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700">Country</h3>
+                    <p className="text-gray-600">{submission.country}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700">Languages</h3>
+                    <p className="text-gray-600">{submission.languages}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-700">Hobbies</h3>
+                    <p className="text-gray-600">{submission.hobbies}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700">Dreams and Goals</h3>
+                    <p className="text-gray-600">{submission.dreams}</p>
+                  </div>
+                </div>
+              </div>
+
+              {submission.canvas_data && (
+                <div className="grid grid-cols-2 gap-4">
+                  {Object.entries(submission.canvas_data).map(([position, dataUrl]) => (
+                    <div key={position} className="relative">
+                      <img
+                        src={dataUrl as string}
+                        alt={`Canvas ${position}`}
+                        className="w-full rounded-lg shadow-md"
+                      />
+                      <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                        {position.charAt(0).toUpperCase() + position.slice(1)} Canvas
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {currentUser === submission.user_id && (
+                <div className="flex justify-end">
+                  <Button
+                    variant="destructive"
+                    onClick={() => handleDelete(submission.id, submission.user_id)}
+                    className="mt-4"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
+            </div>
+          </Card>
         ))}
       </div>
     </div>
