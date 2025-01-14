@@ -14,7 +14,7 @@ interface Submission {
   hobbies: string;
   dreams: string;
   created_at: string;
-  canvas_data: any;
+  canvas_data: Record<string, { drawings: string[]; images: string[]; }>;
   user_id: string;
 }
 
@@ -65,6 +65,40 @@ export const Submissions = () => {
 
     toast.success("Submission deleted");
     fetchSubmissions();
+  };
+
+  const renderMediaContent = (fieldName: string, content: { drawings: string[]; images: string[]; }) => {
+    return (
+      <div className="space-y-2">
+        <h4 className="font-semibold text-gray-700 capitalize">{fieldName} Media</h4>
+        <div className="grid grid-cols-2 gap-2">
+          {content.drawings.map((drawing, idx) => (
+            <div key={`drawing-${idx}`} className="relative">
+              <img 
+                src={drawing} 
+                alt={`Drawing for ${fieldName}`} 
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                Drawing
+              </span>
+            </div>
+          ))}
+          {content.images.map((image, idx) => (
+            <div key={`image-${idx}`} className="relative">
+              <img 
+                src={image} 
+                alt={`Image for ${fieldName}`} 
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                Image
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -120,17 +154,10 @@ export const Submissions = () => {
               </div>
 
               {submission.canvas_data && (
-                <div className="grid grid-cols-2 gap-4">
-                  {Object.entries(submission.canvas_data).map(([position, dataUrl]) => (
-                    <div key={position} className="relative">
-                      <img
-                        src={dataUrl as string}
-                        alt={`Canvas ${position}`}
-                        className="w-full rounded-lg shadow-md"
-                      />
-                      <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
-                        {position.charAt(0).toUpperCase() + position.slice(1)} Canvas
-                      </span>
+                <div className="space-y-4 mt-6">
+                  {Object.entries(submission.canvas_data).map(([fieldName, content]) => (
+                    <div key={fieldName}>
+                      {renderMediaContent(fieldName, content)}
                     </div>
                   ))}
                 </div>
