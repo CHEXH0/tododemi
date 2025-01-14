@@ -4,18 +4,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
+import { Database } from "@/integrations/supabase/types";
 
-interface Submission {
-  id: string;
-  name: string;
-  age: string;
-  country: string;
-  languages: string;
-  hobbies: string;
-  dreams: string;
-  created_at: string;
+type SubmissionRow = Database['public']['Tables']['submissions']['Row'];
+
+interface Submission extends Omit<SubmissionRow, 'canvas_data'> {
   canvas_data: Record<string, { drawings: string[]; images: string[]; }>;
-  user_id: string;
 }
 
 export const Submissions = () => {
@@ -44,7 +38,13 @@ export const Submissions = () => {
       return;
     }
 
-    setSubmissions(data || []);
+    // Type assertion to ensure the canvas_data is properly typed
+    const typedSubmissions = (data || []).map(submission => ({
+      ...submission,
+      canvas_data: submission.canvas_data as Record<string, { drawings: string[]; images: string[]; }>
+    }));
+
+    setSubmissions(typedSubmissions);
   };
 
   const handleDelete = async (id: string, userId: string) => {
