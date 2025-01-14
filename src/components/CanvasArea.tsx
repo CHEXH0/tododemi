@@ -45,10 +45,10 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     if (!fabricCanvas || canvasHistory.length <= 1) return;
     
     const previousState = canvasHistory[canvasHistory.length - 2];
-    fabric.loadSVGFromString(previousState, (objects, options) => {
+    fabric.loadSVGFromString(previousState, (objects: fabric.Object[], options) => {
       if (!fabricCanvas) return;
       fabricCanvas.clear();
-      objects.forEach((obj: fabric.Object) => {
+      objects.forEach((obj) => {
         fabricCanvas.add(obj);
       });
       fabricCanvas.renderAll();
