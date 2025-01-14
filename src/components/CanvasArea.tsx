@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import * as fabric from "fabric";
 import { Button } from "@/components/ui/button";
-import { Paintbrush, Square, Circle as CircleIcon, Eraser, Download, Minus, Plus } from "lucide-react";
+import { Paintbrush, Square, Circle as CircleIcon, Eraser, Download, Minus, Plus, Undo } from "lucide-react";
 import { toast } from "sonner";
 import { Slider } from "@/components/ui/slider";
 
@@ -16,6 +16,7 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
   const [activeColor, setActiveColor] = useState("#000000");
   const [activeTool, setActiveTool] = useState<"draw" | "rectangle" | "circle" | "eraser">("draw");
   const [brushSize, setBrushSize] = useState(2);
+  const [canvasHistory, setCanvasHistory] = useState<string[]>([]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -32,6 +33,18 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     canvas.freeDrawingBrush.color = activeColor;
     
     setFabricCanvas(canvas);
+
+    // Save initial state
+    setCanvasHistory([canvas.toDataURL()]);
+
+    // Add event listener for object modifications
+    canvas.on('object:added', () => {
+      setCanvasHistory(prev => [...prev, canvas.toDataURL()]);
+    });
+
+    canvas.on('object:modified', () => {
+      setCanvasHistory(prev => [...prev, canvas.toDataURL()]);
+    });
 
     return () => {
       canvas.dispose();
@@ -72,11 +85,28 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     }
   };
 
+  const handleUndo = () => {
+    if (!fabricCanvas || canvasHistory.length <= 1) return;
+    
+    const previousState = canvasHistory[canvasHistory.length - 2];
+    fabric.Image.fromURL(previousState, (img) => {
+      fabricCanvas.clear();
+      fabricCanvas.add(img);
+      fabricCanvas.renderAll();
+    }, {
+      crossOrigin: 'anonymous'
+    });
+    
+    setCanvasHistory(prev => prev.slice(0, -1));
+    toast("Action undone!");
+  };
+
   const handleClear = () => {
     if (!fabricCanvas) return;
     fabricCanvas.clear();
     fabricCanvas.backgroundColor = "#ffffff";
     fabricCanvas.renderAll();
+    setCanvasHistory([fabricCanvas.toDataURL()]);
     toast("Canvas cleared!");
   };
 
@@ -119,6 +149,14 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
             onClick={() => handleToolClick("eraser")}
           >
             <Eraser className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleUndo}
+            disabled={canvasHistory.length <= 1}
+          >
+            <Undo className="h-4 w-4" />
           </Button>
         </div>
 
