@@ -45,28 +45,12 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit }: PersonalInfoFormPro
     }));
   };
 
-  const handleMediaDelete = (fieldName: string, type: "drawing" | "image", index: number) => {
-    setMediaContent(prev => ({
-      ...prev,
-      [fieldName]: {
-        ...prev[fieldName],
-        [type === "drawing" ? "drawings" : "images"]: prev[fieldName]?.[type === "drawing" ? "drawings" : "images"].filter((_, i) => i !== index)
-      }
-    }));
-    toast.success(`${type === "drawing" ? "Drawing" : "Image"} deleted successfully!`);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      if (onSubmit) {
-        await onSubmit(formData);
-      }
-      toast.success("Information saved successfully!");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to save information. Please try again.");
+    if (onSubmit) {
+      onSubmit(formData);
     }
+    toast("Information saved successfully!");
   };
 
   const formFields = [
@@ -89,7 +73,6 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit }: PersonalInfoFormPro
           mediaContent={mediaContent[field.name] || { drawings: [], images: [] }}
           onDrawingSave={(dataUrl) => handleDrawingSave(field.name, dataUrl)}
           onImageUpload={(dataUrl) => handleImageUpload(field.name, dataUrl)}
-          onMediaDelete={(type, index) => handleMediaDelete(field.name, type, index)}
         />
       ))}
 

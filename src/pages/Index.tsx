@@ -66,8 +66,10 @@ const Index = () => {
           </p>
         </div>
 
+        <CanvasArea position="top" onSave={(dataUrl) => handleCanvasSave("top", dataUrl)} />
         <CanvasArea position="left" onSave={(dataUrl) => handleCanvasSave("left", dataUrl)} />
         <CanvasArea position="right" onSave={(dataUrl) => handleCanvasSave("right", dataUrl)} />
+        <CanvasArea position="bottom" onSave={(dataUrl) => handleCanvasSave("bottom", dataUrl)} />
 
         <Card className="p-6 bg-white/80 backdrop-blur-sm">
           <PersonalInfoForm onNameChange={handleNameChange} onSubmit={handleSubmit} />
