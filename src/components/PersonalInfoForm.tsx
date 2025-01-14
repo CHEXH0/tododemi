@@ -6,7 +6,11 @@ import { shapes } from "./form/FormShapes";
 import { FormData, PersonalInfoFormProps } from "./form/types";
 import { supabase } from "@/integrations/supabase/client";
 
-export const PersonalInfoForm = ({ onNameChange, onSubmit, initialData }: PersonalInfoFormProps) => {
+export const PersonalInfoForm = ({ 
+  onNameChange, 
+  initialData,
+  onSubmissionComplete 
+}: PersonalInfoFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     name: initialData?.name || "",
     age: initialData?.age || "",
@@ -77,10 +81,10 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit, initialData }: Person
       return;
     }
 
-    if (onSubmit) {
-      onSubmit(formData);
+    toast.success(initialData?.id ? "Submission updated successfully!" : "Submission saved successfully!");
+    if (onSubmissionComplete) {
+      onSubmissionComplete();
     }
-    toast.success("Information saved successfully!");
   };
 
   const formFields = [

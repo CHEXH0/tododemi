@@ -33,38 +33,6 @@ const Index = () => {
     }));
   };
 
-  const handleSubmit = async (formData: any) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      toast.error("Please sign in to save your submission");
-      return;
-    }
-
-    const submission = {
-      user_id: user.id,
-      ...formData,
-      canvas_data: canvasData
-    };
-
-    const { error } = editMode && submissionData?.id
-      ? await supabase
-          .from("submissions")
-          .update(submission)
-          .eq('id', submissionData.id)
-      : await supabase
-          .from("submissions")
-          .insert(submission);
-
-    if (error) {
-      toast.error("Error saving submission");
-      return;
-    }
-
-    toast.success(editMode ? "Submission updated successfully!" : "Submission saved successfully!");
-    navigate("/submissions");
-  };
-
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -110,9 +78,9 @@ const Index = () => {
 
         <Card className="p-6 bg-white/80 backdrop-blur-sm">
           <PersonalInfoForm 
-            onNameChange={handleNameChange} 
-            onSubmit={handleSubmit}
+            onNameChange={handleNameChange}
             initialData={editMode ? { ...submissionData, id: submissionData.id } : undefined}
+            onSubmissionComplete={() => navigate("/submissions")}
           />
         </Card>
       </div>
