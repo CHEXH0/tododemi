@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { InputWithFeatures } from "./form/InputWithFeatures";
 import { shapes } from "./form/FormShapes";
-import { FormData, MediaContent, PersonalInfoFormProps } from "./form/types";
+import { FormData, PersonalInfoFormProps } from "./form/types";
 
-export const PersonalInfoForm = ({ onNameChange }: PersonalInfoFormProps) => {
+export const PersonalInfoForm = ({ onNameChange, onSubmit }: PersonalInfoFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     age: "",
@@ -13,15 +13,6 @@ export const PersonalInfoForm = ({ onNameChange }: PersonalInfoFormProps) => {
     languages: "",
     hobbies: "",
     dreams: "",
-  });
-
-  const [mediaContent, setMediaContent] = useState<MediaContent>({
-    name: { drawings: [], images: [] },
-    age: { drawings: [], images: [] },
-    country: { drawings: [], images: [] },
-    languages: { drawings: [], images: [] },
-    hobbies: { drawings: [], images: [] },
-    dreams: { drawings: [], images: [] },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -34,28 +25,10 @@ export const PersonalInfoForm = ({ onNameChange }: PersonalInfoFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", { formData, mediaContent });
+    if (onSubmit) {
+      onSubmit(formData);
+    }
     toast("Information saved successfully!");
-  };
-
-  const handleDrawingSave = (field: string, dataUrl: string) => {
-    setMediaContent(prev => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        drawings: [...prev[field].drawings, dataUrl]
-      }
-    }));
-  };
-
-  const handleImageUpload = (field: string, dataUrl: string) => {
-    setMediaContent(prev => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        images: [...prev[field].images, dataUrl]
-      }
-    }));
   };
 
   const formFields = [
@@ -75,9 +48,6 @@ export const PersonalInfoForm = ({ onNameChange }: PersonalInfoFormProps) => {
           {...field}
           onChange={handleChange}
           shape={shapes[field.name as keyof typeof shapes]}
-          mediaContent={mediaContent[field.name]}
-          onDrawingSave={(dataUrl) => handleDrawingSave(field.name, dataUrl)}
-          onImageUpload={(dataUrl) => handleImageUpload(field.name, dataUrl)}
         />
       ))}
 

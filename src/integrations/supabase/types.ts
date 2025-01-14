@@ -239,6 +239,48 @@ export type Database = {
           },
         ]
       }
+      submissions: {
+        Row: {
+          age: string | null
+          canvas_data: Json | null
+          country: string | null
+          created_at: string
+          dreams: string | null
+          hobbies: string | null
+          id: string
+          languages: string | null
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: string | null
+          canvas_data?: Json | null
+          country?: string | null
+          created_at?: string
+          dreams?: string | null
+          hobbies?: string | null
+          id?: string
+          languages?: string | null
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: string | null
+          canvas_data?: Json | null
+          country?: string | null
+          created_at?: string
+          dreams?: string | null
+          hobbies?: string | null
+          id?: string
+          languages?: string | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string | null

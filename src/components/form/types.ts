@@ -16,4 +16,5 @@ export interface MediaContent {
 
 export interface PersonalInfoFormProps {
   onNameChange?: (name: string) => void;
+  onSubmit?: (formData: FormData) => void;
 }
