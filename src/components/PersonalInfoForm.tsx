@@ -20,7 +20,7 @@ export const PersonalInfoForm = ({
     dreams: initialData?.dreams || "",
   });
 
-  const { mediaContent, handleDrawingSave, handleImageUpload } = useFormMediaHandler(initialData?.canvas_data);
+  const { mediaContent, handleDrawingSave, handleImageUpload, handleImageRemove } = useFormMediaHandler(initialData?.canvas_data);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -84,6 +84,7 @@ export const PersonalInfoForm = ({
           mediaContent={mediaContent[field.name] || { drawings: [], images: [] }}
           onDrawingSave={(dataUrl) => handleDrawingSave(field.name, dataUrl)}
           onImageUpload={(dataUrl) => handleImageUpload(field.name, dataUrl)}
+          onImageRemove={(index) => handleImageRemove(field.name, index)}
         />
       ))}
       <FormSubmitButton isEditing={!!initialData?.id} />

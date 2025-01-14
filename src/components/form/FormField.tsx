@@ -16,6 +16,7 @@ interface FormFieldProps {
   };
   onDrawingSave: (dataUrl: string) => void;
   onImageUpload: (dataUrl: string) => void;
+  onImageRemove: (index: number) => void;
 }
 
 export const FormField = ({
@@ -24,6 +25,7 @@ export const FormField = ({
   mediaContent,
   onDrawingSave,
   onImageUpload,
+  onImageRemove,
 }: FormFieldProps) => {
   return (
     <InputWithFeatures
@@ -33,6 +35,7 @@ export const FormField = ({
       mediaContent={mediaContent}
       onDrawingSave={onDrawingSave}
       onImageUpload={onImageUpload}
+      onImageRemove={onImageRemove}
     />
   );
 };

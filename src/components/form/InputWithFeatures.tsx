@@ -3,9 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Paintbrush, Image as ImageIcon } from "lucide-react";
+import { Paintbrush, Image as ImageIcon, X } from "lucide-react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { DrawingCanvas } from "@/components/DrawingCanvas";
+import { toast } from "sonner";
 
 interface MediaContent {
   drawings: string[];
@@ -23,6 +24,7 @@ interface InputWithFeaturesProps {
   mediaContent: MediaContent;
   onDrawingSave: (dataUrl: string) => void;
   onImageUpload: (dataUrl: string) => void;
+  onImageRemove?: (index: number) => void;
 }
 
 export const InputWithFeatures = ({
@@ -35,9 +37,15 @@ export const InputWithFeatures = ({
   shape,
   mediaContent,
   onDrawingSave,
-  onImageUpload
+  onImageUpload,
+  onImageRemove
 }: InputWithFeaturesProps) => {
   const InputComponent = isTextarea ? Textarea : Input;
+
+  const handleImageRemove = (index: number) => {
+    onImageRemove?.(index);
+    toast.success("Image removed successfully!");
+  };
 
   return (
     <div className={`space-y-4 p-6 mb-8 shadow-lg ${shape} animate-fade-in`}>
@@ -81,7 +89,17 @@ export const InputWithFeatures = ({
             <img key={`drawing-${idx}`} src={drawing} alt={`Drawing for ${label}`} className="w-full rounded-lg" />
           ))}
           {mediaContent.images.map((image, idx) => (
-            <img key={`image-${idx}`} src={image} alt={`Image for ${label}`} className="w-full rounded-lg" />
+            <div key={`image-${idx}`} className="relative">
+              <img src={image} alt={`Image for ${label}`} className="w-full rounded-lg" />
+              <Button
+                variant="destructive"
+                size="icon"
+                className="absolute top-2 right-2"
+                onClick={() => handleImageRemove(idx)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           ))}
         </div>
       )}

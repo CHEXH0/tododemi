@@ -30,9 +30,20 @@ export const useFormMediaHandler = (initialData?: Record<string, { drawings: str
     }));
   };
 
+  const handleImageRemove = (fieldName: string, imageIndex: number) => {
+    setMediaContent(prev => ({
+      ...prev,
+      [fieldName]: {
+        drawings: prev[fieldName]?.drawings || [],
+        images: prev[fieldName]?.images.filter((_, idx) => idx !== imageIndex)
+      }
+    }));
+  };
+
   return {
     mediaContent,
     handleDrawingSave,
-    handleImageUpload
+    handleImageUpload,
+    handleImageRemove
   };
 };
