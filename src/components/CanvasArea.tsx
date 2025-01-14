@@ -47,7 +47,7 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     const previousState = canvasHistory[canvasHistory.length - 2];
     fabric.Image.fromURL(previousState, {
       crossOrigin: 'anonymous',
-      onload: (img: fabric.Image) => {
+      onLoaded: (img: fabric.Image) => {
         if (!fabricCanvas) return;
         fabricCanvas.clear();
         fabricCanvas.add(img);
