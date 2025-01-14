@@ -57,7 +57,6 @@ export const FabricCanvas = ({
 
     fabricCanvas.isDrawingMode = (activeTool === "draw" || activeTool === "eraser") && isEditing;
     fabricCanvas.selection = isEditing;
-    fabricCanvas.interactive = isEditing;
     
     if (fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.color = activeTool === "eraser" ? "#ffffff" : activeColor;
