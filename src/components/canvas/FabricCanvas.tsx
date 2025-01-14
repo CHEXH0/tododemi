@@ -8,6 +8,7 @@ interface FabricCanvasProps {
   activeColor: string;
   brushSize: number;
   onHistoryUpdate: (dataUrl: string) => void;
+  isEditing: boolean;
 }
 
 export const FabricCanvas = ({
@@ -17,6 +18,7 @@ export const FabricCanvas = ({
   activeColor,
   brushSize,
   onHistoryUpdate,
+  isEditing,
 }: FabricCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -53,13 +55,23 @@ export const FabricCanvas = ({
   useEffect(() => {
     if (!fabricCanvas) return;
 
-    fabricCanvas.isDrawingMode = activeTool === "draw" || activeTool === "eraser";
+    fabricCanvas.isDrawingMode = (activeTool === "draw" || activeTool === "eraser") && isEditing;
+    fabricCanvas.selection = isEditing;
+    fabricCanvas.interactive = isEditing;
     
     if (fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.color = activeTool === "eraser" ? "#ffffff" : activeColor;
       fabricCanvas.freeDrawingBrush.width = activeTool === "eraser" ? brushSize * 2 : brushSize;
     }
-  }, [activeTool, activeColor, brushSize, fabricCanvas]);
+
+    // Disable all objects' controls when not editing
+    fabricCanvas.getObjects().forEach((obj) => {
+      obj.selectable = isEditing;
+      obj.evented = isEditing;
+    });
+
+    fabricCanvas.renderAll();
+  }, [activeTool, activeColor, brushSize, fabricCanvas, isEditing]);
 
   return (
     <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">

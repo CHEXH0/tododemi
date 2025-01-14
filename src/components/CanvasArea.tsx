@@ -5,6 +5,8 @@ import { CanvasToolbar } from "./canvas/CanvasToolbar";
 import { BrushControls } from "./canvas/BrushControls";
 import { ColorPicker } from "./canvas/ColorPicker";
 import { FabricCanvas } from "./canvas/FabricCanvas";
+import { Button } from "./ui/button";
+import { Trash2, Edit } from "lucide-react";
 
 interface CanvasAreaProps {
   position: "left" | "right";
@@ -17,8 +19,10 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
   const [activeTool, setActiveTool] = useState<"draw" | "rectangle" | "circle" | "eraser">("draw");
   const [brushSize, setBrushSize] = useState(2);
   const [canvasHistory, setCanvasHistory] = useState<string[]>([]);
+  const [isEditing, setIsEditing] = useState(true);
 
   const handleToolClick = (tool: typeof activeTool) => {
+    if (!isEditing) return;
     setActiveTool(tool);
 
     if (tool === "rectangle") {
@@ -77,32 +81,70 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     if (!fabricCanvas) return;
     const dataURL = fabricCanvas.toDataURL();
     onSave(dataURL);
+    setIsEditing(false);
     toast("Drawing saved!");
+  };
+
+  const handleDelete = () => {
+    if (!fabricCanvas) return;
+    handleClear();
+    setIsEditing(true);
+    toast("Canvas content deleted!");
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    toast("You can now edit the canvas!");
   };
 
   return (
     <div className={`fixed ${position}-0 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg z-10 animate-fade-in`}>
       <div className="flex flex-col gap-4">
-        <CanvasToolbar
-          activeTool={activeTool}
-          handleToolClick={handleToolClick}
-          handleClear={handleClear}
-          handleSave={handleSave}
-          handleUndo={handleUndo}
-          canUndo={canvasHistory.length > 1}
-        />
+        {isEditing ? (
+          <>
+            <CanvasToolbar
+              activeTool={activeTool}
+              handleToolClick={handleToolClick}
+              handleClear={handleClear}
+              handleSave={handleSave}
+              handleUndo={handleUndo}
+              canUndo={canvasHistory.length > 1}
+            />
 
-        <BrushControls
-          brushSize={brushSize}
-          setBrushSize={setBrushSize}
-        />
+            <BrushControls
+              brushSize={brushSize}
+              setBrushSize={setBrushSize}
+            />
 
-        <div className="flex gap-2 items-center">
-          <ColorPicker
-            activeColor={activeColor}
-            setActiveColor={setActiveColor}
-          />
-        </div>
+            <div className="flex gap-2 items-center">
+              <ColorPicker
+                activeColor={activeColor}
+                setActiveColor={setActiveColor}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleEdit}
+              className="flex items-center gap-2"
+            >
+              <Edit className="h-4 w-4" />
+              Edit
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              className="flex items-center gap-2"
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete
+            </Button>
+          </div>
+        )}
 
         <FabricCanvas
           fabricCanvas={fabricCanvas}
@@ -111,6 +153,7 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
           activeColor={activeColor}
           brushSize={brushSize}
           onHistoryUpdate={(dataUrl) => setCanvasHistory(prev => [...prev, dataUrl])}
+          isEditing={isEditing}
         />
       </div>
     </div>
