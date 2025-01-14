@@ -13,23 +13,19 @@ interface Submission extends Omit<SubmissionRow, 'canvas_data'> {
   canvas_data: Record<string, { drawings: string[]; images: string[]; }>;
 }
 
-const Submissions = () => {
+export const Submissions = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchSubmissions();
+    fetchUserAndSubmissions();
   }, []);
 
-  const fetchSubmissions = async () => {
+  const fetchUserAndSubmissions = async () => {
     const { data: { user } } = await supabase.auth.getUser();
+    setCurrentUserId(user?.id || null);
     
-    if (!user) {
-      toast.error("Please sign in to view submissions");
-      navigate("/auth");
-      return;
-    }
-
     const { data, error } = await supabase
       .from("submissions")
       .select("*")
@@ -40,7 +36,6 @@ const Submissions = () => {
       return;
     }
 
-    // Type assertion to ensure the canvas_data is properly typed
     const typedSubmissions = (data || []).map(submission => ({
       ...submission,
       canvas_data: submission.canvas_data as Record<string, { drawings: string[]; images: string[]; }>
@@ -50,9 +45,7 @@ const Submissions = () => {
   };
 
   const handleDelete = async (id: string, userId: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user || user.id !== userId) {
+    if (!currentUserId || currentUserId !== userId) {
       toast.error("You can only delete your own submissions");
       return;
     }
@@ -68,10 +61,15 @@ const Submissions = () => {
     }
 
     toast.success("Submission deleted successfully");
-    fetchSubmissions();
+    fetchUserAndSubmissions();
   };
 
   const handleEdit = (submission: Submission) => {
+    if (!currentUserId || currentUserId !== submission.user_id) {
+      toast.error("You can only edit your own submissions");
+      return;
+    }
+
     navigate('/', { 
       state: { 
         editMode: true,
@@ -92,7 +90,7 @@ const Submissions = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Your Submissions</h1>
+          <h1 className="text-3xl font-bold text-gray-900">All Submissions</h1>
           <Button onClick={() => navigate('/')}>Create New</Button>
         </div>
 
@@ -106,23 +104,25 @@ const Submissions = () => {
                     Created on {new Date(submission.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(submission)}
-                  >
-                    <Pencil className="h-4 w-4 mr-2" />
-                    Edit
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(submission.id, submission.user_id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                {currentUserId === submission.user_id && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(submission)}
+                    >
+                      <Pencil className="h-4 w-4 mr-2" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(submission.id, submission.user_id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
