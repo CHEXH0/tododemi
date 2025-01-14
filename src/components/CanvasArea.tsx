@@ -89,12 +89,11 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     if (!fabricCanvas || canvasHistory.length <= 1) return;
     
     const previousState = canvasHistory[canvasHistory.length - 2];
-    fabric.Image.fromURL(previousState, (img) => {
+    fabric.Image.fromURL(previousState, (img: fabric.Image) => {
+      if (!fabricCanvas) return;
       fabricCanvas.clear();
       fabricCanvas.add(img);
       fabricCanvas.renderAll();
-    }, {
-      crossOrigin: 'anonymous'
     });
     
     setCanvasHistory(prev => prev.slice(0, -1));
