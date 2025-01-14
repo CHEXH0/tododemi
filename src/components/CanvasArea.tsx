@@ -45,14 +45,16 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     if (!fabricCanvas || canvasHistory.length <= 1) return;
     
     const previousState = canvasHistory[canvasHistory.length - 2];
-    fabric.loadSVGFromString(previousState, (elements: fabric.TSvgElementResult[]) => {
+    fabric.loadSVGFromString(previousState, (objects) => {
       if (!fabricCanvas) return;
       fabricCanvas.clear();
-      elements.forEach(({ element }) => {
-        if (element) {
-          fabricCanvas.add(element);
-        }
-      });
+      if (Array.isArray(objects)) {
+        objects.forEach((obj) => {
+          if (obj instanceof fabric.Object) {
+            fabricCanvas.add(obj);
+          }
+        });
+      }
       fabricCanvas.renderAll();
     });
     
