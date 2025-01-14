@@ -5,6 +5,7 @@ import { CanvasArea } from "@/components/CanvasArea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [userName, setUserName] = useState("");
@@ -49,9 +50,24 @@ const Index = () => {
     navigate("/submissions");
   };
 
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error("Error signing out");
+      return;
+    }
+    navigate("/auth");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-4xl mx-auto">
+        <div className="flex justify-end mb-4">
+          <Button variant="outline" onClick={handleSignOut}>
+            Sign Out
+          </Button>
+        </div>
+
         <div className="text-center mb-8 animate-fade-in">
           {userName && (
             <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4">
