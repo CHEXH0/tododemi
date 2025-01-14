@@ -89,11 +89,14 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
     fabricCanvas.clear();
     
     fabric.Image.fromURL(previousState, {
-      crossOrigin: 'anonymous',
-      scaleX: fabricCanvas.width! / fabricCanvas.width!,
-      scaleY: fabricCanvas.height! / fabricCanvas.height!,
+      crossOrigin: 'anonymous'
     }).then((img) => {
       if (!fabricCanvas) return;
+      
+      // Set scaling after image is loaded
+      img.scaleX = fabricCanvas.width! / img.width!;
+      img.scaleY = fabricCanvas.height! / img.height!;
+      
       fabricCanvas.backgroundImage = img;
       fabricCanvas.renderAll();
     });
