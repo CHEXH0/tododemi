@@ -87,15 +87,25 @@ export const Submissions = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <SubmissionsHeader onCreateNew={() => navigate('/')} />
-        <SubmissionsList
-          submissions={submissions}
-          currentUserId={currentUserId}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+    <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 animate-[gradient_8s_ease-in-out_infinite] py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-rotate-slow"></div>
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-rotate-slow" style={{ animationDelay: "-3s" }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float"></div>
+      </div>
+      
+      {/* Content */}
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="bg-white/30 backdrop-blur-lg rounded-2xl p-8 shadow-2xl animate-fade-in">
+          <SubmissionsHeader onCreateNew={() => navigate('/')} />
+          <SubmissionsList
+            submissions={submissions}
+            currentUserId={currentUserId}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        </div>
       </div>
     </div>
   );

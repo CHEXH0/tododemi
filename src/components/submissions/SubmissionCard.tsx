@@ -25,11 +25,16 @@ export const SubmissionCard = ({
   onDelete 
 }: SubmissionCardProps) => {
   return (
-    <Card key={submission.id} className="p-6">
+    <Card 
+      key={submission.id} 
+      className="p-6 bg-white/80 backdrop-blur-sm border-2 border-transparent hover:border-purple-400 transition-all duration-300 animate-float hover:animate-pulse-rainbow rounded-xl shadow-xl transform hover:-translate-y-1"
+    >
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{submission.name}'s Story</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            {submission.name}'s Story
+          </h2>
+          <p className="text-sm text-gray-500 animate-pulse">
             Created on {new Date(submission.created_at).toLocaleDateString()}
           </p>
         </div>
