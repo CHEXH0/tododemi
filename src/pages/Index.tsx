@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { DrawingCanvas } from "@/components/DrawingCanvas";
-import { ImageUpload } from "@/components/ImageUpload";
 import { PersonalInfoForm } from "@/components/PersonalInfoForm";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [userName, setUserName] = useState("");

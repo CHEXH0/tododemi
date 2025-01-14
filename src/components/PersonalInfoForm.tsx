@@ -25,7 +25,11 @@ interface MediaContent {
   };
 }
 
-export const PersonalInfoForm = () => {
+interface PersonalInfoFormProps {
+  onNameChange?: (name: string) => void;
+}
+
+export const PersonalInfoForm = ({ onNameChange }: PersonalInfoFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     age: "",
@@ -47,6 +51,9 @@ export const PersonalInfoForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'name' && onNameChange) {
+      onNameChange(value);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -111,7 +118,6 @@ export const PersonalInfoForm = () => {
               onChange={handleChange}
               placeholder={`Your ${label.toLowerCase()}`}
               type={type}
-              required
               className={`${isTextarea ? "min-h-[100px]" : ""} bg-transparent`}
             />
           </div>
