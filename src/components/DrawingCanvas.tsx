@@ -17,10 +17,14 @@ export const DrawingCanvas = () => {
       width: 600,
       height: 400,
       backgroundColor: "#ffffff",
+      isDrawingMode: activeTool === "draw" || activeTool === "eraser"
     });
 
+    // Initialize the brush after canvas creation
+    canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
     canvas.freeDrawingBrush.width = 2;
     canvas.freeDrawingBrush.color = activeColor;
+    
     setFabricCanvas(canvas);
 
     return () => {
