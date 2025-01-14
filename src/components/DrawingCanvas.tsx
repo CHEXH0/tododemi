@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
-import { Button } from "@/components/ui/button";
-import { Paintbrush, Square, Circle as CircleIcon, Eraser, Undo, Download, Plus, Minus } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
+import { DrawingTools } from "./canvas/DrawingTools";
+import { CanvasControls } from "./canvas/CanvasControls";
+import { BrushSizeControl } from "./canvas/BrushSizeControl";
+import { ColorPickerControl } from "./canvas/ColorPickerControl";
 
 interface DrawingCanvasProps {
   onSave?: (dataUrl: string) => void;
@@ -131,79 +132,25 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg animate-fade-in">
       <div className="flex gap-2 items-center justify-between flex-wrap">
-        <div className="flex gap-2">
-          <Button
-            variant={activeTool === "draw" ? "default" : "outline"}
-            size="icon"
-            onClick={() => handleToolClick("draw")}
-          >
-            <Paintbrush className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={activeTool === "rectangle" ? "default" : "outline"}
-            size="icon"
-            onClick={() => handleToolClick("rectangle")}
-          >
-            <Square className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={activeTool === "circle" ? "default" : "outline"}
-            size="icon"
-            onClick={() => handleToolClick("circle")}
-          >
-            <CircleIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={activeTool === "eraser" ? "default" : "outline"}
-            size="icon"
-            onClick={() => handleToolClick("eraser")}
-          >
-            <Eraser className="h-4 w-4" />
-          </Button>
-        </div>
+        <DrawingTools 
+          activeTool={activeTool}
+          onToolClick={handleToolClick}
+        />
         <div className="flex gap-2 items-center">
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={() => setBrushSize(Math.max(1, brushSize - 1))}
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
-          <Slider
-            value={[brushSize]}
-            onValueChange={(value) => setBrushSize(value[0])}
-            min={1}
-            max={20}
-            step={1}
-            className="w-24"
+          <BrushSizeControl 
+            brushSize={brushSize}
+            onBrushSizeChange={setBrushSize}
           />
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={() => setBrushSize(Math.min(20, brushSize + 1))}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-          <input
-            type="color"
-            value={activeColor}
-            onChange={(e) => setActiveColor(e.target.value)}
-            className="w-8 h-8 rounded cursor-pointer"
+          <ColorPickerControl
+            activeColor={activeColor}
+            onColorChange={setActiveColor}
           />
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleUndo}
-            disabled={canvasHistory.length <= 1}
-          >
-            <Undo className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleClear}>
-            Clear
-          </Button>
-          <Button variant="outline" size="icon" onClick={handleSave}>
-            <Download className="h-4 w-4" />
-          </Button>
+          <CanvasControls
+            onUndo={handleUndo}
+            onClear={handleClear}
+            onSave={handleSave}
+            canUndo={canvasHistory.length > 1}
+          />
         </div>
       </div>
       <div className="border border-gray-200 rounded-lg overflow-hidden">
