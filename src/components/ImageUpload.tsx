@@ -4,7 +4,11 @@ import { Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export const ImageUpload = () => {
+interface ImageUploadProps {
+  onUpload?: (dataUrl: string) => void;
+}
+
+export const ImageUpload = ({ onUpload }: ImageUploadProps) => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -12,12 +16,14 @@ export const ImageUpload = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result as string);
+        const dataUrl = reader.result as string;
+        setPreview(dataUrl);
+        onUpload?.(dataUrl);
         toast("Image uploaded successfully!");
       };
       reader.readAsDataURL(file);
     }
-  }, []);
+  }, [onUpload]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

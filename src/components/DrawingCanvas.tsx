@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Paintbrush, Square, Circle as CircleIcon, Eraser, Undo, Download } from "lucide-react";
 import { toast } from "sonner";
 
-export const DrawingCanvas = () => {
+interface DrawingCanvasProps {
+  onSave?: (dataUrl: string) => void;
+}
+
+export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | null>(null);
   const [activeColor, setActiveColor] = useState("#000000");
@@ -20,7 +24,6 @@ export const DrawingCanvas = () => {
       isDrawingMode: activeTool === "draw" || activeTool === "eraser"
     });
 
-    // Initialize the brush after canvas creation
     canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
     canvas.freeDrawingBrush.width = 2;
     canvas.freeDrawingBrush.color = activeColor;
@@ -77,13 +80,18 @@ export const DrawingCanvas = () => {
   const handleSave = () => {
     if (!fabricCanvas) return;
     const dataURL = fabricCanvas.toDataURL();
-    const link = document.createElement("a");
-    link.download = "my-drawing.png";
-    link.href = dataURL;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast("Drawing saved!");
+    if (onSave) {
+      onSave(dataURL);
+      toast("Drawing saved!");
+    } else {
+      const link = document.createElement("a");
+      link.download = "my-drawing.png";
+      link.href = dataURL;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast("Drawing downloaded!");
+    }
   };
 
   return (
