@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas as FabricCanvas, Circle, Rect } from "fabric";
+import { fabric } from "fabric";
 import { Button } from "@/components/ui/button";
 import { Paintbrush, Square, Circle as CircleIcon, Eraser, Undo, Download } from "lucide-react";
 import { toast } from "sonner";
 
 export const DrawingCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
+  const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | null>(null);
   const [activeColor, setActiveColor] = useState("#000000");
   const [activeTool, setActiveTool] = useState<"draw" | "rectangle" | "circle" | "eraser">("draw");
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const canvas = new FabricCanvas(canvasRef.current, {
+    const canvas = new fabric.Canvas(canvasRef.current, {
       width: 600,
       height: 400,
       backgroundColor: "#ffffff",
@@ -43,7 +43,7 @@ export const DrawingCanvas = () => {
     setActiveTool(tool);
 
     if (tool === "rectangle") {
-      const rect = new Rect({
+      const rect = new fabric.Rect({
         left: 100,
         top: 100,
         fill: activeColor,
@@ -52,7 +52,7 @@ export const DrawingCanvas = () => {
       });
       fabricCanvas?.add(rect);
     } else if (tool === "circle") {
-      const circle = new Circle({
+      const circle = new fabric.Circle({
         left: 100,
         top: 100,
         fill: activeColor,
