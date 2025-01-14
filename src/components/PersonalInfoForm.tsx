@@ -9,17 +9,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const PersonalInfoForm = ({ onNameChange, onSubmit }: PersonalInfoFormProps) => {
+export const PersonalInfoForm = ({ onNameChange, onSubmit, initialData }: PersonalInfoFormProps) => {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    age: "",
-    country: "",
-    languages: "",
-    hobbies: "",
-    dreams: "",
+    name: initialData?.name || "",
+    age: initialData?.age || "",
+    country: initialData?.country || "",
+    languages: initialData?.languages || "",
+    hobbies: initialData?.hobbies || "",
+    dreams: initialData?.dreams || "",
   });
 
-  const [mediaContent, setMediaContent] = useState<Record<string, { drawings: string[]; images: string[]; }>>({});
+  const [mediaContent, setMediaContent] = useState<Record<string, { drawings: string[]; images: string[]; }>>(
+    initialData?.canvas_data || {}
+  );
   const [templateName, setTemplateName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

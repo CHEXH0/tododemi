@@ -17,4 +17,7 @@ export interface MediaContent {
 export interface PersonalInfoFormProps {
   onNameChange?: (name: string) => void;
   onSubmit?: (formData: FormData) => void;
+  initialData?: FormData & {
+    canvas_data?: Record<string, { drawings: string[]; images: string[]; }>;
+  };
 }
