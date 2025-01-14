@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Database } from "@/integrations/supabase/types";
-import { SubmissionCard } from "@/components/submissions/SubmissionCard";
+import { SubmissionsList } from "@/components/submissions/SubmissionsList";
+import { SubmissionsHeader } from "@/components/submissions/SubmissionsHeader";
 
 type SubmissionRow = Database['public']['Tables']['submissions']['Row'];
 
@@ -73,6 +73,7 @@ export const Submissions = () => {
       state: { 
         editMode: true,
         submissionData: {
+          id: submission.id,
           name: submission.name,
           age: submission.age,
           country: submission.country,
@@ -88,22 +89,13 @@ export const Submissions = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">All Submissions</h1>
-          <Button onClick={() => navigate('/')}>Create New</Button>
-        </div>
-
-        <div className="space-y-6">
-          {submissions.map((submission) => (
-            <SubmissionCard
-              key={submission.id}
-              submission={submission}
-              currentUserId={currentUserId}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        <SubmissionsHeader onCreateNew={() => navigate('/')} />
+        <SubmissionsList
+          submissions={submissions}
+          currentUserId={currentUserId}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </div>
     </div>
   );

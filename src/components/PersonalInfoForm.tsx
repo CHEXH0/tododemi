@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { InputWithFeatures } from "./form/InputWithFeatures";
-import { shapes } from "./form/FormShapes";
 import { FormData, PersonalInfoFormProps } from "./form/types";
 import { supabase } from "@/integrations/supabase/client";
+import { FormField } from "./form/FormField";
+import { FormSubmitButton } from "./form/FormSubmitButton";
+import { useFormMediaHandler } from "./form/FormMediaHandler";
 
 export const PersonalInfoForm = ({ 
   onNameChange, 
@@ -20,9 +20,7 @@ export const PersonalInfoForm = ({
     dreams: initialData?.dreams || "",
   });
 
-  const [mediaContent, setMediaContent] = useState<Record<string, { drawings: string[]; images: string[]; }>>(
-    initialData?.canvas_data || {}
-  );
+  const { mediaContent, handleDrawingSave, handleImageUpload } = useFormMediaHandler(initialData?.canvas_data);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -30,26 +28,6 @@ export const PersonalInfoForm = ({
     if (name === 'name' && onNameChange) {
       onNameChange(value);
     }
-  };
-
-  const handleDrawingSave = (fieldName: string, dataUrl: string) => {
-    setMediaContent(prev => ({
-      ...prev,
-      [fieldName]: {
-        drawings: [...(prev[fieldName]?.drawings || []), dataUrl],
-        images: prev[fieldName]?.images || []
-      }
-    }));
-  };
-
-  const handleImageUpload = (fieldName: string, dataUrl: string) => {
-    setMediaContent(prev => ({
-      ...prev,
-      [fieldName]: {
-        drawings: prev[fieldName]?.drawings || [],
-        images: [...(prev[fieldName]?.images || []), dataUrl]
-      }
-    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,23 +77,16 @@ export const PersonalInfoForm = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {formFields.map((field) => (
-        <InputWithFeatures
+        <FormField
           key={field.name}
-          {...field}
+          field={field}
           onChange={handleChange}
-          shape={shapes[field.name as keyof typeof shapes]}
           mediaContent={mediaContent[field.name] || { drawings: [], images: [] }}
           onDrawingSave={(dataUrl) => handleDrawingSave(field.name, dataUrl)}
           onImageUpload={(dataUrl) => handleImageUpload(field.name, dataUrl)}
         />
       ))}
-
-      <Button 
-        type="submit" 
-        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3"
-      >
-        {initialData?.id ? 'Update Information' : 'Save Information'}
-      </Button>
+      <FormSubmitButton isEditing={!!initialData?.id} />
     </form>
   );
 };
