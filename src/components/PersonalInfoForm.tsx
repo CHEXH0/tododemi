@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { InputWithFeatures } from "./form/InputWithFeatures";
 import { shapes } from "./form/FormShapes";
 import { FormData, PersonalInfoFormProps } from "./form/types";
+import { supabase } from "@/integrations/supabase/client";
 
 export const PersonalInfoForm = ({ onNameChange, onSubmit, initialData }: PersonalInfoFormProps) => {
   const [formData, setFormData] = useState<FormData>({
@@ -47,12 +48,39 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit, initialData }: Person
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error("Please sign in to save your submission");
+      return;
+    }
+
+    const submissionData = {
+      ...formData,
+      canvas_data: mediaContent,
+      user_id: user.id,
+    };
+
+    let { error } = initialData?.id 
+      ? await supabase
+          .from("submissions")
+          .update(submissionData)
+          .eq('id', initialData.id)
+      : await supabase
+          .from("submissions")
+          .insert(submissionData);
+
+    if (error) {
+      toast.error("Error saving submission");
+      return;
+    }
+
     if (onSubmit) {
       onSubmit(formData);
     }
-    toast("Information saved successfully!");
+    toast.success("Information saved successfully!");
   };
 
   const formFields = [
@@ -82,7 +110,7 @@ export const PersonalInfoForm = ({ onNameChange, onSubmit, initialData }: Person
         type="submit" 
         className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3"
       >
-        Save Information
+        {initialData?.id ? 'Update Information' : 'Save Information'}
       </Button>
     </form>
   );

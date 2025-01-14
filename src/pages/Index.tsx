@@ -47,16 +47,21 @@ const Index = () => {
       canvas_data: canvasData
     };
 
-    const { error } = await supabase
-      .from("submissions")
-      .insert(submission);
+    const { error } = editMode && submissionData?.id
+      ? await supabase
+          .from("submissions")
+          .update(submission)
+          .eq('id', submissionData.id)
+      : await supabase
+          .from("submissions")
+          .insert(submission);
 
     if (error) {
       toast.error("Error saving submission");
       return;
     }
 
-    toast.success("Submission saved successfully!");
+    toast.success(editMode ? "Submission updated successfully!" : "Submission saved successfully!");
     navigate("/submissions");
   };
 
@@ -107,7 +112,7 @@ const Index = () => {
           <PersonalInfoForm 
             onNameChange={handleNameChange} 
             onSubmit={handleSubmit}
-            initialData={editMode ? submissionData : undefined}
+            initialData={editMode ? { ...submissionData, id: submissionData.id } : undefined}
           />
         </Card>
       </div>
