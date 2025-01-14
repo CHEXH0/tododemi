@@ -29,19 +29,21 @@ const Auth = () => {
       supabase.auth.getSession().then(({ data: { session }, error }) => {
         if (error instanceof AuthApiError) {
           switch (error.message) {
-            case "Email signups are disabled":
-            case "Email logins are disabled":
-              setErrorMessage("Email authentication is currently disabled. Please contact the administrator to enable email authentication.");
+            case "Invalid login credentials":
+              setErrorMessage("The email or password you entered is incorrect. Please try again.");
               break;
             case "User already registered":
               setErrorMessage("This email is already registered. Please try logging in instead.");
               break;
-            case "Invalid login credentials":
-              setErrorMessage("Invalid email or password. Please check your credentials and try again.");
+            case "Email signups are disabled":
+            case "Email logins are disabled":
+              setErrorMessage("Email authentication is currently disabled. Please contact the administrator.");
               break;
             default:
-              if (error.message.includes("email_provider_disabled")) {
-                setErrorMessage("Email authentication is currently disabled. Please contact the administrator to enable email authentication.");
+              if (error.message.includes("invalid_credentials")) {
+                setErrorMessage("The email or password you entered is incorrect. Please try again.");
+              } else if (error.message.includes("email_provider_disabled")) {
+                setErrorMessage("Email authentication is currently disabled. Please contact the administrator.");
               } else {
                 setErrorMessage(error.message);
               }
