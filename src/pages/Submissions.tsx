@@ -161,19 +161,27 @@ export const Submissions = () => {
               {submission.canvas_data && Object.entries(submission.canvas_data).map(([field, media]) => (
                 <div key={field} className="mt-6">
                   <h3 className="font-semibold mb-4 capitalize">{field} Media</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {media.drawings.map((drawing, idx) => (
-                      <div key={`drawing-${idx}`} className="relative">
-                        <img src={drawing} alt={`Drawing for ${field}`} className="w-full rounded-lg" />
-                        <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                      <div key={`drawing-${idx}`} className="relative aspect-square">
+                        <img 
+                          src={drawing} 
+                          alt={`Drawing for ${field}`} 
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                        <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
                           Drawing
                         </span>
                       </div>
                     ))}
                     {media.images.map((image, idx) => (
-                      <div key={`image-${idx}`} className="relative">
-                        <img src={image} alt={`Image for ${field}`} className="w-full rounded-lg" />
-                        <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                      <div key={`image-${idx}`} className="relative aspect-square">
+                        <img 
+                          src={image} 
+                          alt={`Image for ${field}`} 
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                        <span className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
                           Image
                         </span>
                       </div>
