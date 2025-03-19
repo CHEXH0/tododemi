@@ -39,7 +39,7 @@ export const ContactSection = () => {
       </CardContent>
       <CardFooter>
         <Link to="/english-test" className="w-full">
-          <Button className="w-full py-5 sm:py-6 text-sm sm:text-base">Programa Tu Evaluación Gratuita</Button>
+          <Button className="w-full py-5 sm:py-6 text-sm sm:text-base">Evaluación de Nivel de Inglés</Button>
         </Link>
       </CardFooter>
     </Card>
