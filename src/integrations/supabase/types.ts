@@ -9,69 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      submissions: {
-        Row: {
-          age: string | null
-          canvas_data: Json | null
-          country: string | null
-          created_at: string
-          dreams: string | null
-          hobbies: string | null
-          id: string
-          languages: string | null
-          name: string | null
-          user_id: string
-        }
-        Insert: {
-          age?: string | null
-          canvas_data?: Json | null
-          country?: string | null
-          created_at?: string
-          dreams?: string | null
-          hobbies?: string | null
-          id?: string
-          languages?: string | null
-          name?: string | null
-          user_id: string
-        }
-        Update: {
-          age?: string | null
-          canvas_data?: Json | null
-          country?: string | null
-          created_at?: string
-          dreams?: string | null
-          hobbies?: string | null
-          id?: string
-          languages?: string | null
-          name?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      templates: {
-        Row: {
-          canvas_data: Json | null
-          created_at: string
-          id: string
-          name: string
-          user_id: string
-        }
-        Insert: {
-          canvas_data?: Json | null
-          created_at?: string
-          id?: string
-          name: string
-          user_id: string
-        }
-        Update: {
-          canvas_data?: Json | null
-          created_at?: string
-          id?: string
-          name?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
