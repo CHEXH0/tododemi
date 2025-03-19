@@ -1,81 +1,87 @@
 
-import { GraduationCap, MessageSquare } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Book, GraduationCap, Headphones, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export const CoursesList = () => {
+const courses = [
+  {
+    title: "Inglés Básico (A1-A2)",
+    description: "Desarrolla habilidades fundamentales de comunicación en inglés para principiantes.",
+    features: [
+      "Vocabulario esencial y gramática básica",
+      "Conversación introductoria y comprensión auditiva",
+      "Lectura y escritura de textos simples",
+    ],
+    icon: Book,
+    color: "from-purple-500 to-indigo-500",
+  },
+  {
+    title: "Inglés Intermedio (B1-B2)",
+    description: "Mejora tu fluidez y precisión para comunicarte en situaciones cotidianas.",
+    features: [
+      "Gramática y vocabulario avanzados",
+      "Conversación fluida sobre temas diversos",
+      "Comprensión de medios de comunicación en inglés",
+    ],
+    icon: MessageSquare,
+    color: "from-blue-500 to-cyan-500",
+  },
+  {
+    title: "Inglés Avanzado (C1-C2)",
+    description: "Perfecciona tu inglés a nivel nativo con expresiones idiomáticas y matices culturales.",
+    features: [
+      "Expresiones idiomáticas y vocabulario especializado",
+      "Debates y presentaciones avanzadas",
+      "Comprensión de contenido académico y profesional",
+    ],
+    icon: GraduationCap,
+    color: "from-orange-500 to-pink-500",
+  },
+  {
+    title: "Inglés para Objetivos Específicos",
+    description: "Cursos especializados para profesionales y necesidades específicas.",
+    features: [
+      "Inglés para negocios y entornos corporativos",
+      "Preparación para exámenes internacionales (TOEFL, IELTS, Cambridge)",
+      "Inglés para sectores específicos (turismo, tecnología, etc.)",
+    ],
+    icon: Headphones,
+    color: "from-emerald-500 to-teal-500",
+  },
+];
+
+export const CoursesList = ({ openContactDialog }) => {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5" />
-            Inglés para Principiantes
-          </CardTitle>
-          <CardDescription>Para quienes comienzan su viaje en inglés</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 list-disc pl-5">
-            <li>Vocabulario y frases básicas</li>
-            <li>Estructuras gramaticales esenciales</li>
-            <li>Práctica de conversación simple</li>
-            <li>Comprensión auditiva y pronunciación</li>
-          </ul>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5" />
-            Inglés Intermedio
-          </CardTitle>
-          <CardDescription>Para quienes tienen conocimientos básicos y buscan mejorar</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 list-disc pl-5">
-            <li>Ampliación de vocabulario</li>
-            <li>Gramática más compleja</li>
-            <li>Práctica de conversación fluida</li>
-            <li>Comprensión lectora</li>
-          </ul>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5" />
-            Inglés Avanzado
-          </CardTitle>
-          <CardDescription>Para quienes desean perfeccionar sus habilidades</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 list-disc pl-5">
-            <li>Expresiones matizadas y modismos</li>
-            <li>Dominio de gramática avanzada</li>
-            <li>Habilidades de debate y presentación</li>
-            <li>Escritura para propósitos académicos/empresariales</li>
-          </ul>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="h-5 w-5" />
-            Inglés de Negocios
-          </CardTitle>
-          <CardDescription>Cursos especializados para profesionales</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 list-disc pl-5">
-            <li>Vocabulario profesional</li>
-            <li>Redacción de correos e informes</li>
-            <li>Habilidades para reuniones y negociaciones</li>
-            <li>Técnicas de presentación</li>
-          </ul>
-        </CardContent>
-      </Card>
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
+      {courses.map((course, index) => (
+        <Card key={index} className="overflow-hidden">
+          <CardHeader className="pb-2">
+            <div className={`w-12 h-12 rounded-lg flex items-center justify-center bg-gradient-to-r ${course.color} mb-3`}>
+              <course.icon className="h-6 w-6 text-white" />
+            </div>
+            <CardTitle className="text-lg">{course.title}</CardTitle>
+            <CardDescription>{course.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-1 text-sm">
+              {course.features.map((feature, idx) => (
+                <li key={idx} className="flex items-start">
+                  <span className={`bg-gradient-to-r ${course.color} bg-clip-text text-transparent mr-2`}>•</span>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <Button 
+              className={`w-full bg-gradient-to-r ${course.color} hover:opacity-90`}
+              onClick={openContactDialog}
+            >
+              Más Información
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   );
 };

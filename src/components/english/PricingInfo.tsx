@@ -2,7 +2,7 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export const PricingInfo = () => {
+export const PricingInfo = ({ openContactDialog }) => {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <Card>
@@ -27,7 +27,7 @@ export const PricingInfo = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" onClick={openContactDialog}>
             Inscribirse Ahora
           </Button>
         </CardFooter>
@@ -55,7 +55,7 @@ export const PricingInfo = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Reservar Clase Privada</Button>
+          <Button className="w-full" onClick={openContactDialog}>Reservar Clase Privada</Button>
         </CardFooter>
       </Card>
 
@@ -72,7 +72,9 @@ export const PricingInfo = () => {
           </ul>
         </CardContent>
         <CardFooter>
-          <Button variant="outline" className="w-full">Contactar para Tarifas Especiales</Button>
+          <Button variant="outline" className="w-full" onClick={openContactDialog}>
+            Contactar para Tarifas Especiales
+          </Button>
         </CardFooter>
       </Card>
     </div>

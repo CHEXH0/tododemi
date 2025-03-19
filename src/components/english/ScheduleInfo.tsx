@@ -1,8 +1,9 @@
 
 import { Clock } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-export const ScheduleInfo = () => {
+export const ScheduleInfo = ({ openContactDialog }) => {
   return (
     <Card>
       <CardHeader>
@@ -49,6 +50,14 @@ export const ScheduleInfo = () => {
           </div>
         </div>
       </CardContent>
+      <CardFooter className="pt-2">
+        <Button 
+          className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600" 
+          onClick={openContactDialog}
+        >
+          Consultar Disponibilidad
+        </Button>
+      </CardFooter>
     </Card>
   );
 };
