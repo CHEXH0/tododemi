@@ -25,7 +25,10 @@ export const TestResults = ({
   totalQuestions,
   levelCounts
 }: TestResultsProps) => {
-  const percentCorrect = Math.round((correctAnswers / totalQuestions) * 100);
+  // Ensure we show exactly 100% when all answers are correct
+  const percentCorrect = correctAnswers === totalQuestions 
+    ? 100 
+    : Math.round((correctAnswers / totalQuestions) * 100);
   
   const spanishLevelDescriptions: Record<EnglishLevel, string> = {
     A1: "Principiante: Puedes entender y usar frases y expresiones básicas.",

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { TestIntro } from "./test/TestIntro";
 import { QuestionCard } from "./test/QuestionCard";
@@ -55,6 +54,7 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
       }
     });
     
+    // Set the exact count of correct answers
     setCorrectAnswerCount(correctCount);
     setLevelCounts(levelCorrectCounts);
     
