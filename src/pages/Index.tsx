@@ -1,7 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { PersonalInfoForm } from "@/components/PersonalInfoForm";
 import { Card } from "@/components/ui/card";
-import { CanvasArea } from "@/components/CanvasArea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [userName, setUserName] = useState("");
-  const [canvasData, setCanvasData] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const location = useLocation();
   const editMode = location.state?.editMode;
@@ -18,19 +17,11 @@ const Index = () => {
   useEffect(() => {
     if (editMode && submissionData) {
       setUserName(submissionData.name || "");
-      setCanvasData(submissionData.canvas_data || {});
     }
   }, [editMode, submissionData]);
 
   const handleNameChange = (name: string) => {
     setUserName(name);
-  };
-
-  const handleCanvasSave = (position: string, dataUrl: string) => {
-    setCanvasData(prev => ({
-      ...prev,
-      [position]: dataUrl
-    }));
   };
 
   const handleSignOut = async () => {
@@ -74,14 +65,6 @@ const Index = () => {
           <p className="mt-3 text-lg text-white/80">
             {editMode ? 'Update your personal profile and story!' : 'Create your personal profile and share your story with others!'}
           </p>
-          <p className="mt-2 text-sm text-white/60 md:hidden">
-            Please use a desktop device to access the drawing features.
-          </p>
-        </div>
-
-        <div className="hidden md:block">
-          <CanvasArea position="left" onSave={(dataUrl) => handleCanvasSave("left", dataUrl)} />
-          <CanvasArea position="right" onSave={(dataUrl) => handleCanvasSave("right", dataUrl)} />
         </div>
 
         <Card className="p-6 bg-white/90 backdrop-blur-sm border-2 border-purple-200">
