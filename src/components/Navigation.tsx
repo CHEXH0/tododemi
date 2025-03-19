@@ -5,7 +5,6 @@ import {
   NavigationMenu, 
   NavigationMenuContent, 
   NavigationMenuItem, 
-  NavigationMenuLink, 
   NavigationMenuList, 
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
@@ -15,12 +14,17 @@ import {
   Home, 
   FileText, 
   GraduationCap, 
-  LogOut
+  LogOut,
+  LogIn
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "./ui/button";
 
-export const Navigation = () => {
+interface NavigationProps {
+  isAuthenticated: boolean | null;
+}
+
+export const Navigation = ({ isAuthenticated }: NavigationProps) => {
   const location = useLocation();
   
   const handleLogout = async () => {
@@ -36,33 +40,37 @@ export const Navigation = () => {
         
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link to="/">
-                <NavigationMenuLink 
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    location.pathname === "/" && "bg-accent text-accent-foreground"
-                  )}
-                >
-                  <Home className="mr-2 h-4 w-4" />
-                  Inicio
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            
-            <NavigationMenuItem>
-              <Link to="/submissions">
-                <NavigationMenuLink 
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    location.pathname === "/submissions" && "bg-accent text-accent-foreground"
-                  )}
-                >
-                  <FileText className="mr-2 h-4 w-4" />
-                  Envíos
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            {isAuthenticated && (
+              <>
+                <NavigationMenuItem>
+                  <Link to="/">
+                    <NavigationMenuLink 
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        location.pathname === "/" && "bg-accent text-accent-foreground"
+                      )}
+                    >
+                      <Home className="mr-2 h-4 w-4" />
+                      Inicio
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/submissions">
+                    <NavigationMenuLink 
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        location.pathname === "/submissions" && "bg-accent text-accent-foreground"
+                      )}
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      Envíos
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              </>
+            )}
             
             <NavigationMenuItem>
               <Link to="/english-classes">
@@ -80,10 +88,19 @@ export const Navigation = () => {
           </NavigationMenuList>
         </NavigationMenu>
         
-        <Button variant="ghost" size="sm" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Cerrar Sesión
-        </Button>
+        {isAuthenticated ? (
+          <Button variant="ghost" size="sm" onClick={handleLogout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Cerrar Sesión
+          </Button>
+        ) : (
+          <Link to="/auth">
+            <Button variant="ghost" size="sm">
+              <LogIn className="mr-2 h-4 w-4" />
+              Iniciar Sesión
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );

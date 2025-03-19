@@ -53,7 +53,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   
   return (
     <>
-      {isAuthenticated && <Navigation />}
+      <Navigation isAuthenticated={isAuthenticated} />
       <main>{children}</main>
     </>
   );
