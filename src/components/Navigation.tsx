@@ -52,7 +52,7 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                       )}
                     >
                       <Home className="mr-2 h-4 w-4" />
-                      Inicio
+                      All About Me
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
