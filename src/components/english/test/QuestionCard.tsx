@@ -1,10 +1,11 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Question } from "./testData";
+import type { Question } from "./testData";
+import { Progress } from "@/components/ui/progress";
 
 interface QuestionCardProps {
   question: Question;
@@ -16,43 +17,49 @@ interface QuestionCardProps {
   onPrevious: () => void;
 }
 
-export const QuestionCard = ({ 
-  question, 
-  currentStep, 
+export const QuestionCard = ({
+  question,
+  currentStep,
   totalQuestions,
-  selectedAnswer, 
-  onSelectAnswer, 
-  onNext, 
-  onPrevious 
+  selectedAnswer,
+  onSelectAnswer,
+  onNext,
+  onPrevious
 }: QuestionCardProps) => {
   const progress = ((currentStep + 1) / totalQuestions) * 100;
-  const isAnswered = selectedAnswer !== undefined;
-
+  
   return (
-    <Card className="mt-8 bg-white/80 backdrop-blur-sm border-purple-100 dark:border-purple-900/50 shadow-md">
-      <CardHeader>
-        <div className="w-full bg-gray-200 h-2 rounded-full mb-2">
-          <div 
-            className="bg-gradient-to-r from-purple-500 to-indigo-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardHeader className="pb-2">
+        <div className="space-y-1">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-muted-foreground">
+              Pregunta {currentStep + 1} de {totalQuestions}
+            </span>
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md">
+              Nivel: {question.level}
+            </span>
+          </div>
+          <Progress value={progress} className="h-2" />
         </div>
-        <CardTitle className="text-lg md:text-xl text-purple-900 dark:text-purple-100">
-          Question {currentStep + 1} of {totalQuestions}
-        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="mb-6">
-          <h3 className="text-base md:text-lg font-medium mb-4">{question.text}</h3>
-          <RadioGroup
-            value={selectedAnswer || ""}
+      
+      <CardContent className="pt-4">
+        <div className="space-y-6">
+          <div className="text-lg font-medium">{question.text}</div>
+          
+          <RadioGroup 
+            value={selectedAnswer} 
             onValueChange={onSelectAnswer}
             className="space-y-3"
           >
             {question.options.map((option) => (
-              <div key={option.id} className="flex items-center space-x-2 rounded-md p-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
-                <RadioGroupItem value={option.id} id={`option-${option.id}`} />
-                <Label htmlFor={`option-${option.id}`} className="flex-grow cursor-pointer">
+              <div key={option.id} className="flex items-start space-x-2">
+                <RadioGroupItem value={option.id} id={`option-${option.id}`} className="mt-1" />
+                <Label 
+                  htmlFor={`option-${option.id}`}
+                  className="cursor-pointer flex-1 text-base font-normal py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                >
                   {option.text}
                 </Label>
               </div>
@@ -60,21 +67,22 @@ export const QuestionCard = ({
           </RadioGroup>
         </div>
       </CardContent>
+      
       <CardFooter className="flex justify-between">
-        <Button
-          variant="outline"
+        <Button 
+          variant="outline" 
           onClick={onPrevious}
           disabled={currentStep === 0}
-          className="border-purple-200 dark:border-purple-800"
         >
-          Previous
+          Anterior
         </Button>
-        <Button
+        
+        <Button 
           onClick={onNext}
-          disabled={!isAnswered}
-          className={`${isAnswered ? 'bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600' : 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'}`}
+          disabled={!selectedAnswer}
+          className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
         >
-          {currentStep < totalQuestions - 1 ? 'Next' : 'Finish'}
+          {currentStep === totalQuestions - 1 ? "Finalizar" : "Siguiente"}
         </Button>
       </CardFooter>
     </Card>

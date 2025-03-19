@@ -12,10 +12,10 @@ const EnglishTest = () => {
           <Breadcrumb />
           <div className="mb-6">
             <h1 className="text-3xl md:text-4xl font-bold text-purple-900 dark:text-purple-100">
-              English Level Assessment
+              Evaluación de Nivel de Inglés
             </h1>
             <p className="mt-2 text-lg text-muted-foreground">
-              Discover your current English proficiency level with our comprehensive test
+              Descubre tu nivel actual de inglés con nuestra prueba completa
             </p>
           </div>
           <EnglishLevelTest startExpanded={true} />

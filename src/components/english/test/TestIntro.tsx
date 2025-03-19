@@ -1,10 +1,8 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { CircleHelp } from "lucide-react";
-import { levelDescriptions } from "./testData";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { GraduationCap, Clock, CheckCircle } from "lucide-react";
 
 interface TestIntroProps {
   onStartTest: () => void;
@@ -12,39 +10,61 @@ interface TestIntroProps {
 
 export const TestIntro = ({ onStartTest }: TestIntroProps) => {
   return (
-    <Card className="mt-8 bg-white/80 backdrop-blur-sm border-purple-100 dark:border-purple-900/50 shadow-md">
+    <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-xl md:text-2xl text-purple-900 dark:text-purple-100">Evaluate Your English Level</CardTitle>
-        <CardDescription>Take this quick test to determine your current English proficiency level.</CardDescription>
+        <CardTitle className="text-xl md:text-2xl text-center">
+          Prueba de Nivel de Inglés
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm md:text-base mb-4">
-          This test consists of 10 questions covering different levels of English proficiency from beginner (A1) to proficient (C2).
-          The questions will adapt to your skill level and provide you with an accurate assessment at the end.
+      
+      <CardContent className="space-y-6">
+        <p className="text-center text-muted-foreground">
+          Descubre tu nivel actual de inglés con nuestra prueba rápida y precisa.
         </p>
         
-        <Collapsible className="w-full mb-4">
-          <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 mb-2">
-            <CircleHelp className="h-4 w-4" />
-            <span>What do the levels mean?</span>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-md text-sm space-y-2 mt-2">
-              {Object.entries(levelDescriptions).map(([level, description]) => (
-                <div key={level} className="mb-2">
-                  <span className="font-bold">{level}:</span> {description}
-                </div>
-              ))}
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+            <Clock className="h-8 w-8 text-purple-500 mb-2" />
+            <h3 className="font-semibold">10 Minutos</h3>
+            <p className="text-sm text-muted-foreground">
+              Completa la prueba rápidamente
+            </p>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+            <CheckCircle className="h-8 w-8 text-purple-500 mb-2" />
+            <h3 className="font-semibold">10 Preguntas</h3>
+            <p className="text-sm text-muted-foreground">
+              Preguntas de opción múltiple
+            </p>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+            <GraduationCap className="h-8 w-8 text-purple-500 mb-2" />
+            <h3 className="font-semibold">Resultados Instantáneos</h3>
+            <p className="text-sm text-muted-foreground">
+              Obtén tu nivel según MCER
+            </p>
+          </div>
+        </div>
+        
+        <div className="bg-muted p-4 rounded-lg">
+          <h4 className="font-semibold mb-2">Instrucciones:</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+            <li>Lee cada pregunta cuidadosamente</li>
+            <li>Selecciona la mejor respuesta para cada pregunta</li>
+            <li>No uses diccionarios u otras ayudas</li>
+            <li>Al finalizar, recibirás tu nivel según el Marco Común Europeo de Referencia (MCER)</li>
+          </ul>
+        </div>
       </CardContent>
+      
       <CardFooter>
         <Button 
-          onClick={onStartTest}
+          onClick={onStartTest} 
           className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
         >
-          Start Test
+          Comenzar Prueba
         </Button>
       </CardFooter>
     </Card>
