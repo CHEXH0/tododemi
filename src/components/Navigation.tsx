@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "./ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface NavigationProps {
   isAuthenticated: boolean | null;
@@ -27,15 +28,16 @@ interface NavigationProps {
 
 export const Navigation = ({ isAuthenticated }: NavigationProps) => {
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
   return (
-    <div className="border-b w-full py-2">
+    <div className="border-b w-full py-2 overflow-x-hidden">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="font-semibold text-lg">
+        <Link to="/" className="font-semibold text-lg whitespace-nowrap">
           Mi Aplicación
         </Link>
         
@@ -51,8 +53,8 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                         location.pathname === "/" && "bg-accent text-accent-foreground"
                       )}
                     >
-                      <Home className="mr-2 h-4 w-4" />
-                      All About Me
+                      <Home className="h-4 w-4" />
+                      {!isMobile && <span className="ml-2">All About Me</span>}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -65,8 +67,8 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                         location.pathname === "/submissions" && "bg-accent text-accent-foreground"
                       )}
                     >
-                      <FileText className="mr-2 h-4 w-4" />
-                      Envíos
+                      <FileText className="h-4 w-4" />
+                      {!isMobile && <span className="ml-2">Envíos</span>}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -81,8 +83,8 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                     location.pathname === "/english-classes" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <GraduationCap className="mr-2 h-4 w-4" />
-                  Clases de Inglés
+                  <GraduationCap className="h-4 w-4" />
+                  {!isMobile && <span className="ml-2">Clases de Inglés</span>}
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -90,15 +92,15 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
         </NavigationMenu>
         
         {isAuthenticated ? (
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Cerrar Sesión
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="whitespace-nowrap">
+            <LogOut className="h-4 w-4" />
+            {!isMobile && <span className="ml-2">Cerrar Sesión</span>}
           </Button>
         ) : (
           <Link to="/auth">
-            <Button variant="ghost" size="sm">
-              <LogIn className="mr-2 h-4 w-4" />
-              Iniciar Sesión
+            <Button variant="ghost" size="sm" className="whitespace-nowrap">
+              <LogIn className="h-4 w-4" />
+              {!isMobile && <span className="ml-2">Iniciar Sesión</span>}
             </Button>
           </Link>
         )}
