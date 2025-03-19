@@ -13,9 +13,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' &&
-    componentTagger({
-      customVirtualModuleId: 'virtual:lovable-components',
-    }),
+    componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
