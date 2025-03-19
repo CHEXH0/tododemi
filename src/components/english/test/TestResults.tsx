@@ -27,16 +27,26 @@ export const TestResults = ({
 }: TestResultsProps) => {
   const percentCorrect = Math.round((correctAnswers / totalQuestions) * 100);
   
+  const spanishLevelDescriptions: Record<EnglishLevel, string> = {
+    A1: "Principiante: Puedes entender y usar frases y expresiones básicas.",
+    A2: "Elemental: Puedes comunicarte en tareas simples que requieren un intercambio directo de información.",
+    B1: "Intermedio: Puedes lidiar con la mayoría de las situaciones durante un viaje y describir experiencias, eventos y ambiciones.",
+    B2: "Intermedio Alto: Puedes interactuar con un grado de fluidez y espontaneidad que hace posible la interacción sin tensión.",
+    C1: "Avanzado: Puedes expresar ideas con fluidez y espontaneidad sin buscar expresiones de manera obvia.",
+    C2: "Competente: Puedes entender con facilidad prácticamente todo lo que escuchas o lees.",
+    "": ""
+  };
+  
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-green-500" />
-            Test Completed!
+            ¡Prueba Completada!
           </DialogTitle>
           <DialogDescription>
-            Based on your responses, we've determined your English level.
+            Basado en tus respuestas, hemos determinado tu nivel de inglés.
           </DialogDescription>
         </DialogHeader>
         
@@ -46,19 +56,19 @@ export const TestResults = ({
               {resultLevel}
             </div>
             <p className="text-sm md:text-base text-gray-700 dark:text-gray-300">
-              {levelDescriptions[resultLevel]}
+              {spanishLevelDescriptions[resultLevel]}
             </p>
             
             <div className="w-full mt-2">
               <div className="flex justify-between text-sm mb-1">
-                <span>Score:</span>
-                <span className="font-medium">{correctAnswers} of {totalQuestions} ({percentCorrect}%)</span>
+                <span>Puntuación:</span>
+                <span className="font-medium">{correctAnswers} de {totalQuestions} ({percentCorrect}%)</span>
               </div>
               <Progress value={percentCorrect} className="h-2" />
             </div>
             
             <div className="w-full mt-2 text-sm">
-              <h4 className="font-semibold mb-2 text-left">Correct answers by level:</h4>
+              <h4 className="font-semibold mb-2 text-left">Respuestas correctas por nivel:</h4>
               <div className="grid grid-cols-3 gap-2">
                 {Object.entries(levelCounts)
                   .filter(([level]) => level !== "") // Filter out empty level
@@ -66,7 +76,7 @@ export const TestResults = ({
                     <div key={level} className="bg-gray-100 dark:bg-gray-800 p-2 rounded-md text-center">
                       <div className="font-medium">{level}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {count > 0 ? `✓ Correct` : `✗ Incorrect`}
+                        {count > 0 ? `✓ Correcto` : `✗ Incorrecto`}
                       </div>
                     </div>
                   ))}
@@ -77,7 +87,7 @@ export const TestResults = ({
               <div className="flex items-start gap-2 mb-2">
                 <CircleAlert className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
                 <p className="text-gray-700 dark:text-gray-300 text-left">
-                  This assessment is a quick overview of your English abilities. For a more comprehensive evaluation, we recommend scheduling a personal evaluation with one of our language specialists.
+                  Esta evaluación es una visión general rápida de tus habilidades en inglés. Para una evaluación más completa, te recomendamos programar una evaluación personal con uno de nuestros especialistas en idiomas.
                 </p>
               </div>
             </div>
@@ -90,13 +100,13 @@ export const TestResults = ({
             className="flex-1 border-purple-200 dark:border-purple-800"
             onClick={onRestartTest}
           >
-            Restart Test
+            Reiniciar Prueba
           </Button>
           <Button
             className="flex-1 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
             onClick={() => onOpenChange(false)}
           >
-            Close
+            Cerrar
           </Button>
         </DialogFooter>
       </DialogContent>
