@@ -17,6 +17,16 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [resultLevel, setResultLevel] = useState<EnglishLevel>("");
   const [showTest, setShowTest] = useState<boolean>(startExpanded);
+  const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
+  const [levelCounts, setLevelCounts] = useState<Record<EnglishLevel, number>>({
+    A1: 0,
+    A2: 0,
+    B1: 0,
+    B2: 0,
+    C1: 0,
+    C2: 0,
+    "": 0
+  });
   
   const handleSelectAnswer = (questionId: number, answerId: string) => {
     setAnswers((prev) => ({
@@ -25,12 +35,38 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
     }));
   };
 
+  const calculateResults = () => {
+    // Count correct answers
+    let correctCount = 0;
+    const levelCorrectCounts: Record<EnglishLevel, number> = {
+      A1: 0,
+      A2: 0,
+      B1: 0,
+      B2: 0,
+      C1: 0,
+      C2: 0,
+      "": 0
+    };
+    
+    questions.forEach(question => {
+      if (answers[question.id] === question.correctOptionId) {
+        correctCount++;
+        levelCorrectCounts[question.level]++;
+      }
+    });
+    
+    setCorrectAnswerCount(correctCount);
+    setLevelCounts(levelCorrectCounts);
+    
+    const level = calculateEnglishLevel(answers, questions);
+    setResultLevel(level);
+  };
+
   const handleNext = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      const level = calculateEnglishLevel(answers, questions);
-      setResultLevel(level);
+      calculateResults();
       setIsDialogOpen(true);
     }
   };
@@ -46,6 +82,16 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
     setCurrentStep(0);
     setAnswers({});
     setResultLevel("");
+    setCorrectAnswerCount(0);
+    setLevelCounts({
+      A1: 0,
+      A2: 0,
+      B1: 0,
+      B2: 0,
+      C1: 0,
+      C2: 0,
+      "": 0
+    });
   };
 
   const restartTest = () => {
@@ -53,6 +99,16 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
     setCurrentStep(0);
     setAnswers({});
     setResultLevel("");
+    setCorrectAnswerCount(0);
+    setLevelCounts({
+      A1: 0,
+      A2: 0,
+      B1: 0,
+      B2: 0,
+      C1: 0,
+      C2: 0,
+      "": 0
+    });
   };
 
   const currentQuestion = questions[currentStep];
@@ -78,6 +134,9 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
         onOpenChange={setIsDialogOpen}
         resultLevel={resultLevel}
         onRestartTest={restartTest}
+        correctAnswers={correctAnswerCount}
+        totalQuestions={questions.length}
+        levelCounts={levelCounts}
       />
     </div>
   );
