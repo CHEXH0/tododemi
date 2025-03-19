@@ -54,7 +54,7 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                       )}
                     >
                       <Home className="h-4 w-4" />
-                      {!isMobile && <span className="ml-2">Todo Sobre Mí</span>}
+                      {!isMobile && <span className="ml-2">All About Me</span>}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>

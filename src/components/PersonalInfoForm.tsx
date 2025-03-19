@@ -90,12 +90,12 @@ export const PersonalInfoForm = ({
   };
 
   const formFields = [
-    { label: "Nombre", name: "name", value: formData.name },
-    { label: "Edad", name: "age", value: formData.age, type: "number" },
-    { label: "País", name: "country", value: formData.country },
-    { label: "Idiomas", name: "languages", value: formData.languages },
-    { label: "Pasatiempos", name: "hobbies", value: formData.hobbies, isTextarea: true },
-    { label: "Sueños y Metas", name: "dreams", value: formData.dreams, isTextarea: true },
+    { label: "Full Name", name: "name", value: formData.name },
+    { label: "Age", name: "age", value: formData.age, type: "number" },
+    { label: "Country", name: "country", value: formData.country },
+    { label: "Languages", name: "languages", value: formData.languages },
+    { label: "Hobbies", name: "hobbies", value: formData.hobbies, isTextarea: true },
+    { label: "Dreams and Goals", name: "dreams", value: formData.dreams, isTextarea: true },
   ];
 
   return (

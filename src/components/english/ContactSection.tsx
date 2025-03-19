@@ -19,21 +19,21 @@ export const ContactSection = () => {
             <ul className="space-y-2 text-sm sm:text-base">
               <li className="flex flex-col sm:flex-row sm:items-center gap-1">
                 <span className="font-medium">Email:</span> 
-                <span>english.bogota@example.com</span>
+                <span>sergio.ramrz21@gmail.com</span>
               </li>
               <li className="flex flex-col sm:flex-row sm:items-center gap-1">
                 <span className="font-medium">Teléfono:</span> 
-                <span>+57 300 123 4567</span>
+                <span>+1 909 384 2193</span>
               </li>
               <li className="flex flex-col sm:flex-row sm:items-center gap-1">
                 <span className="font-medium">WhatsApp:</span> 
-                <span>+57 300 123 4567</span>
+                <span>+1 909 384 2193</span>
               </li>
             </ul>
           </div>
           <div className="space-y-2">
             <h3 className="font-medium text-sm sm:text-base">Ubicación</h3>
-            <p className="text-sm sm:text-base">Carrera 7 #71-21, Oficina 802<br />Bogotá, Colombia</p>
+            <p className="text-sm sm:text-base">Los Cerros, La Felicidad<br />Bogotá, Colombia</p>
           </div>
         </div>
       </CardContent>

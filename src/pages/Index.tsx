@@ -60,7 +60,7 @@ const Index = () => {
             </h2>
           )}
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-            {editMode ? 'Edita Tu Historia' : 'Todo Sobre Mí'}
+            {editMode ? 'Edita Tu Historia' : 'All About Me'}
           </h1>
           <p className="mt-3 text-lg text-white/80">
             {editMode ? '¡Actualiza tu perfil personal y tu historia!' : '¡Crea tu perfil personal y comparte tu historia con otros!'}

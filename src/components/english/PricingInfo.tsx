@@ -13,15 +13,15 @@ export const PricingInfo = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Clase Individual (2 horas)</span>
-              <span className="font-medium">$30 USD</span>
+              <span className="font-medium">$95,000 COP</span>
             </div>
             <div className="flex justify-between">
               <span>Paquete de 10 Clases</span>
-              <span className="font-medium">$250 USD</span>
+              <span className="font-medium">$800,000 COP</span>
             </div>
             <div className="flex justify-between">
               <span>Mensual (3 veces por semana)</span>
-              <span className="font-medium">$320 USD</span>
+              <span className="font-medium">$1,024,000 COP</span>
             </div>
           </div>
         </CardContent>
@@ -36,15 +36,15 @@ export const PricingInfo = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Clase Individual (1 hora)</span>
-              <span className="font-medium">$40 USD</span>
+              <span className="font-medium">$100,000 COP</span>
             </div>
             <div className="flex justify-between">
               <span>Paquete de 10 Clases</span>
-              <span className="font-medium">$350 USD</span>
+              <span className="font-medium">$875,000 COP</span>
             </div>
             <div className="flex justify-between">
               <span>Mensual (3 veces por semana)</span>
-              <span className="font-medium">$450 USD</span>
+              <span className="font-medium">$1,125,000 COP</span>
             </div>
           </div>
         </CardContent>
@@ -59,7 +59,7 @@ export const PricingInfo = () => {
             <li>Todos los materiales están incluidos en el precio</li>
             <li>El pago puede realizarse en Pesos Colombianos al tipo de cambio actual</li>
             <li>Descuentos especiales disponibles para estudiantes y grupos corporativos</li>
-            <li>Clase de prueba disponible a una tarifa reducida de $15 USD</li>
+            <li>Clase de prueba disponible a una tarifa reducida de $60,000 COP</li>
           </ul>
         </CardContent>
       </Card>

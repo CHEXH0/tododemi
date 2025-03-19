@@ -60,7 +60,7 @@ export const InputWithFeatures = ({
             name={name}
             value={value}
             onChange={onChange}
-            placeholder={`Tu ${label.toLowerCase()}`}
+            placeholder={`My ${label.toLowerCase()}`}
             type={type}
             className={`${isTextarea ? "min-h-[100px]" : ""} bg-transparent`}
           />
