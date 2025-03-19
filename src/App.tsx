@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Submissions from "./pages/Submissions";
 import Auth from "./pages/Auth";
 import EnglishClasses from "./pages/EnglishClasses";
+import EnglishTest from "./pages/EnglishTest";
 import Navigation from "./components/Navigation";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const App = () => (
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/submissions" element={<ProtectedRoute><Submissions /></ProtectedRoute>} />
             <Route path="/english-classes" element={<EnglishClasses />} />
+            <Route path="/english-test" element={<EnglishTest />} />
           </Routes>
         </AppLayout>
       </BrowserRouter>

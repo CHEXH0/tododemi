@@ -1,6 +1,7 @@
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const ContactSection = () => {
   return (
@@ -37,7 +38,9 @@ export const ContactSection = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full py-5 sm:py-6 text-sm sm:text-base">Programa Tu Evaluación Gratuita</Button>
+        <Link to="/english-test" className="w-full">
+          <Button className="w-full py-5 sm:py-6 text-sm sm:text-base">Programa Tu Evaluación Gratuita</Button>
+        </Link>
       </CardFooter>
     </Card>
   );

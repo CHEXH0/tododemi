@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -155,12 +154,16 @@ const levelDescriptions = {
   C2: "Proficient: You can understand with ease virtually everything heard or read."
 };
 
-export const EnglishLevelTest = () => {
+interface EnglishLevelTestProps {
+  startExpanded?: boolean;
+}
+
+export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProps) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [resultLevel, setResultLevel] = useState<EnglishLevel>("");
-  const [showTest, setShowTest] = useState<boolean>(false);
+  const [showTest, setShowTest] = useState<boolean>(startExpanded);
   
   const handleSelectAnswer = (questionId: number, answerId: string) => {
     setAnswers((prev) => ({

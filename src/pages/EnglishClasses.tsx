@@ -5,7 +5,6 @@ import { ClassesHeader } from "@/components/english/ClassesHeader";
 import { FeatureCards } from "@/components/english/FeatureCards";
 import { CoursesTabs } from "@/components/english/CoursesTabs";
 import { ContactSection } from "@/components/english/ContactSection";
-import { EnglishLevelTest } from "@/components/english/EnglishLevelTest";
 
 const EnglishClasses = () => {
   return (
@@ -15,7 +14,6 @@ const EnglishClasses = () => {
         <div className="flex flex-col space-y-8 md:space-y-10">
           <Breadcrumb />
           <ClassesHeader />
-          <EnglishLevelTest />
           <FeatureCards />
           <div className="relative py-6 md:py-8">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-100/50 to-blue-100/50 dark:from-purple-900/10 dark:to-blue-900/10 rounded-xl -z-10" />
