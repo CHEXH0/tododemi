@@ -31,7 +31,7 @@ export const Navigation = () => {
     <div className="border-b w-full py-2">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="font-semibold text-lg">
-          My Application
+          Mi Aplicación
         </Link>
         
         <NavigationMenu>
@@ -45,7 +45,7 @@ export const Navigation = () => {
                   )}
                 >
                   <Home className="mr-2 h-4 w-4" />
-                  Home
+                  Inicio
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -59,7 +59,7 @@ export const Navigation = () => {
                   )}
                 >
                   <FileText className="mr-2 h-4 w-4" />
-                  Submissions
+                  Envíos
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -73,7 +73,7 @@ export const Navigation = () => {
                   )}
                 >
                   <GraduationCap className="mr-2 h-4 w-4" />
-                  English Classes
+                  Clases de Inglés
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -82,7 +82,7 @@ export const Navigation = () => {
         
         <Button variant="ghost" size="sm" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          Cerrar Sesión
         </Button>
       </div>
     </div>

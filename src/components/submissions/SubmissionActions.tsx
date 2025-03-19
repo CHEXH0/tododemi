@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
@@ -19,14 +20,14 @@ export const SubmissionActions = ({ canEdit, onEdit, onDelete }: SubmissionActio
         onClick={onEdit}
       >
         <Pencil className="h-4 w-4 mr-2" />
-        Edit
+        Editar
       </Button>
       <Button
         variant="destructive"
         size="sm"
         onClick={onDelete}
       >
-        Delete
+        Eliminar
       </Button>
     </div>
   );

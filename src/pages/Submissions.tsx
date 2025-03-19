@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -31,7 +32,7 @@ export const Submissions = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      toast.error("Error fetching submissions");
+      toast.error("Error al obtener envíos");
       return;
     }
 
@@ -45,7 +46,7 @@ export const Submissions = () => {
 
   const handleDelete = async (id: string, userId: string) => {
     if (!currentUserId || currentUserId !== userId) {
-      toast.error("You can only delete your own submissions");
+      toast.error("Solo puedes eliminar tus propios envíos");
       return;
     }
 
@@ -55,17 +56,17 @@ export const Submissions = () => {
       .eq("id", id);
 
     if (error) {
-      toast.error("Error deleting submission");
+      toast.error("Error al eliminar el envío");
       return;
     }
 
-    toast.success("Submission deleted successfully");
+    toast.success("Envío eliminado exitosamente");
     fetchUserAndSubmissions();
   };
 
   const handleEdit = (submission: Submission) => {
     if (!currentUserId || currentUserId !== submission.user_id) {
-      toast.error("You can only edit your own submissions");
+      toast.error("Solo puedes editar tus propios envíos");
       return;
     }
 

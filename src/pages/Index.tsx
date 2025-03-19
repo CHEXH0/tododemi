@@ -27,7 +27,7 @@ const Index = () => {
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      toast.error("Error signing out");
+      toast.error("Error al cerrar sesión");
       return;
     }
     navigate("/auth");
@@ -42,28 +42,28 @@ const Index = () => {
             onClick={() => navigate('/submissions')}
             className="bg-white/80 hover:bg-white/90 border-purple-200"
           >
-            View Submissions
+            Ver Envíos
           </Button>
           <Button 
             variant="outline" 
             onClick={handleSignOut}
             className="bg-white/80 hover:bg-white/90 border-purple-200"
           >
-            Sign Out
+            Cerrar Sesión
           </Button>
         </div>
 
         <div className="text-center mb-8">
           {userName && (
             <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-pink-100 mb-4">
-              {userName}'s Story
+              La Historia de {userName}
             </h2>
           )}
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-            {editMode ? 'Edit Your Story' : 'All About Me'}
+            {editMode ? 'Edita Tu Historia' : 'Todo Sobre Mí'}
           </h1>
           <p className="mt-3 text-lg text-white/80">
-            {editMode ? 'Update your personal profile and story!' : 'Create your personal profile and share your story with others!'}
+            {editMode ? '¡Actualiza tu perfil personal y tu historia!' : '¡Crea tu perfil personal y comparte tu historia con otros!'}
           </p>
         </div>
 

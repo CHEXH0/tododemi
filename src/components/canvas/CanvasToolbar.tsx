@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Paintbrush, Square, Circle as CircleIcon, Eraser, Download, Undo } from "lucide-react";
 
@@ -58,7 +59,7 @@ export const CanvasToolbar = ({
         <Undo className="h-4 w-4" />
       </Button>
       <Button variant="outline" size="sm" onClick={handleClear}>
-        Clear
+        Limpiar
       </Button>
       <Button variant="outline" size="icon" onClick={handleSave}>
         <Download className="h-4 w-4" />

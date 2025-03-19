@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { FormData, PersonalInfoFormProps } from "./form/types";
@@ -35,7 +36,7 @@ export const PersonalInfoForm = ({
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      toast.error("Please sign in to save your submission");
+      toast.error("Por favor inicia sesión para guardar tu envío");
       return;
     }
 
@@ -55,23 +56,23 @@ export const PersonalInfoForm = ({
           .insert(submissionData);
 
     if (error) {
-      toast.error("Error saving submission");
+      toast.error("Error al guardar el envío");
       return;
     }
 
-    toast.success(initialData?.id ? "Submission updated successfully!" : "Submission saved successfully!");
+    toast.success(initialData?.id ? "¡Envío actualizado exitosamente!" : "¡Envío guardado exitosamente!");
     if (onSubmissionComplete) {
       onSubmissionComplete();
     }
   };
 
   const formFields = [
-    { label: "Name", name: "name", value: formData.name },
-    { label: "Age", name: "age", value: formData.age, type: "number" },
-    { label: "Country", name: "country", value: formData.country },
-    { label: "Languages", name: "languages", value: formData.languages },
-    { label: "Hobbies", name: "hobbies", value: formData.hobbies, isTextarea: true },
-    { label: "Dreams and Goals", name: "dreams", value: formData.dreams, isTextarea: true },
+    { label: "Nombre", name: "name", value: formData.name },
+    { label: "Edad", name: "age", value: formData.age, type: "number" },
+    { label: "País", name: "country", value: formData.country },
+    { label: "Idiomas", name: "languages", value: formData.languages },
+    { label: "Pasatiempos", name: "hobbies", value: formData.hobbies, isTextarea: true },
+    { label: "Sueños y Metas", name: "dreams", value: formData.dreams, isTextarea: true },
   ];
 
   return (
