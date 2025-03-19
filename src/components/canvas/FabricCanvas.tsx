@@ -21,13 +21,18 @@ export const FabricCanvas = ({
   isEditing,
 }: FabricCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !containerRef.current) return;
+
+    // Get container dimensions
+    const containerWidth = containerRef.current.clientWidth;
+    const canvasHeight = 400; // Fixed height, adjust as needed
 
     const canvas = new fabric.Canvas(canvasRef.current, {
-      width: 300,
-      height: window.innerHeight - 100,
+      width: containerWidth,
+      height: canvasHeight,
       backgroundColor: "#ffffff",
       isDrawingMode: activeTool === "draw" || activeTool === "eraser"
     });
@@ -47,7 +52,18 @@ export const FabricCanvas = ({
       onHistoryUpdate(canvas.toDataURL());
     });
 
+    // Resize handler to keep canvas responsive
+    const handleResize = () => {
+      if (!canvas || !containerRef.current) return;
+      const newWidth = containerRef.current.clientWidth;
+      canvas.setWidth(newWidth);
+      canvas.renderAll();
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
+      window.removeEventListener('resize', handleResize);
       canvas.dispose();
     };
   }, []);
@@ -73,8 +89,8 @@ export const FabricCanvas = ({
   }, [activeTool, activeColor, brushSize, fabricCanvas, isEditing]);
 
   return (
-    <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">
-      <canvas ref={canvasRef} className="max-w-full" />
+    <div ref={containerRef} className="mt-4 border border-gray-200 rounded-lg overflow-hidden w-full">
+      <canvas ref={canvasRef} className="w-full" />
     </div>
   );
 };

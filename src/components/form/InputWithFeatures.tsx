@@ -1,8 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Paintbrush, Image as ImageIcon, X } from "lucide-react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { DrawingCanvas } from "@/components/DrawingCanvas";
@@ -69,6 +70,7 @@ export const InputWithFeatures = ({
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl">
+            <DialogTitle className="text-lg font-semibold">Draw Something</DialogTitle>
             <DrawingCanvas onSave={onDrawingSave} />
           </DialogContent>
         </Dialog>
@@ -79,6 +81,7 @@ export const InputWithFeatures = ({
             </Button>
           </DialogTrigger>
           <DialogContent>
+            <DialogTitle className="text-lg font-semibold">Upload an Image</DialogTitle>
             <ImageUpload onUpload={onImageUpload} />
           </DialogContent>
         </Dialog>
