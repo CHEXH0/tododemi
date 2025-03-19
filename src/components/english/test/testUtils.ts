@@ -25,6 +25,11 @@ export const calculateEnglishLevel = (answers: Record<number, string>, questions
   // Determine level based on pattern of correct answers
   let resultLevel: EnglishLevel = "";
   
+  // If all answers are correct, return C2 immediately
+  if (totalCorrect === questions.length) {
+    return "C2";
+  }
+  
   if (totalCorrect <= 3) {
     resultLevel = "A1";
   } else if (totalCorrect <= 5) {
