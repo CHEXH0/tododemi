@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { toast } from "sonner";
@@ -5,6 +6,7 @@ import { DrawingTools } from "./canvas/DrawingTools";
 import { CanvasControls } from "./canvas/CanvasControls";
 import { BrushSizeControl } from "./canvas/BrushSizeControl";
 import { ColorPickerControl } from "./canvas/ColorPickerControl";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface DrawingCanvasProps {
   onSave?: (dataUrl: string) => void;
@@ -18,14 +20,15 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
   const [activeTool, setActiveTool] = useState<"draw" | "rectangle" | "circle" | "eraser">("draw");
   const [brushSize, setBrushSize] = useState(2);
   const [canvasHistory, setCanvasHistory] = useState<string[]>([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) return;
 
     // Get container dimensions
     const containerWidth = containerRef.current.clientWidth;
-    // Set a reasonable height for the canvas (adjust as needed)
-    const canvasHeight = 500;
+    // Use smaller height on mobile
+    const canvasHeight = isMobile ? 350 : 500;
 
     const canvas = new fabric.Canvas(canvasRef.current, {
       width: containerWidth,
@@ -63,7 +66,7 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
       window.removeEventListener('resize', handleResize);
       canvas.dispose();
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!fabricCanvas) return;
@@ -150,12 +153,12 @@ export const DrawingCanvas = ({ onSave }: DrawingCanvasProps) => {
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg animate-fade-in">
-      <div className="flex gap-2 items-center justify-between flex-wrap">
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-2 items-center justify-between flex-wrap`}>
         <DrawingTools 
           activeTool={activeTool}
           onToolClick={handleToolClick}
         />
-        <div className="flex gap-2 items-center">
+        <div className={`flex ${isMobile ? 'flex-row' : ''} gap-2 items-center flex-wrap`}>
           <BrushSizeControl 
             brushSize={brushSize}
             onBrushSizeChange={setBrushSize}

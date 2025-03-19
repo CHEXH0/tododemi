@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import * as fabric from "fabric";
 import { toast } from "sonner";
@@ -7,6 +8,7 @@ import { ColorPicker } from "./canvas/ColorPicker";
 import { FabricCanvas } from "./canvas/FabricCanvas";
 import { Button } from "./ui/button";
 import { Trash2, Edit } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CanvasAreaProps {
   position: "left" | "right";
@@ -20,6 +22,7 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
   const [brushSize, setBrushSize] = useState(2);
   const [canvasHistory, setCanvasHistory] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(true);
+  const isMobile = useIsMobile();
 
   const handleToolClick = (tool: typeof activeTool) => {
     if (!isEditing) return;
@@ -97,30 +100,36 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
     toast("You can now edit the canvas!");
   };
 
+  const positionClass = isMobile 
+    ? "fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm rounded-t-lg shadow-lg z-20 animate-fade-in"
+    : `fixed ${position}-0 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg z-10 animate-fade-in`;
+
   return (
-    <div className={`fixed ${position}-0 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg z-10 animate-fade-in`}>
+    <div className={positionClass}>
       <div className="flex flex-col gap-4">
         {isEditing ? (
           <>
-            <CanvasToolbar
-              activeTool={activeTool}
-              handleToolClick={handleToolClick}
-              handleClear={handleClear}
-              handleSave={handleSave}
-              handleUndo={handleUndo}
-              canUndo={canvasHistory.length > 1}
-            />
-
-            <BrushControls
-              brushSize={brushSize}
-              setBrushSize={setBrushSize}
-            />
-
-            <div className="flex gap-2 items-center">
-              <ColorPicker
-                activeColor={activeColor}
-                setActiveColor={setActiveColor}
+            <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-2`}>
+              <CanvasToolbar
+                activeTool={activeTool}
+                handleToolClick={handleToolClick}
+                handleClear={handleClear}
+                handleSave={handleSave}
+                handleUndo={handleUndo}
+                canUndo={canvasHistory.length > 1}
               />
+
+              <div className={`flex ${isMobile ? 'flex-row justify-between mt-2' : ''} gap-2 items-center`}>
+                <BrushControls
+                  brushSize={brushSize}
+                  setBrushSize={setBrushSize}
+                />
+
+                <ColorPicker
+                  activeColor={activeColor}
+                  setActiveColor={setActiveColor}
+                />
+              </div>
             </div>
           </>
         ) : (
@@ -132,7 +141,7 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
               className="flex items-center gap-2"
             >
               <Edit className="h-4 w-4" />
-              Edit
+              {!isMobile && "Edit"}
             </Button>
             <Button
               variant="destructive"
@@ -141,7 +150,7 @@ export const CanvasArea = ({ position, onSave }: CanvasAreaProps) => {
               className="flex items-center gap-2"
             >
               <Trash2 className="h-4 w-4" />
-              Delete
+              {!isMobile && "Delete"}
             </Button>
           </div>
         )}

@@ -1,5 +1,7 @@
+
 import { useEffect, useRef } from "react";
 import * as fabric from "fabric";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FabricCanvasProps {
   fabricCanvas: fabric.Canvas | null;
@@ -22,13 +24,15 @@ export const FabricCanvas = ({
 }: FabricCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) return;
 
     // Get container dimensions
     const containerWidth = containerRef.current.clientWidth;
-    const canvasHeight = 400; // Fixed height, adjust as needed
+    // Use smaller height on mobile
+    const canvasHeight = isMobile ? 300 : 400;
 
     const canvas = new fabric.Canvas(canvasRef.current, {
       width: containerWidth,
@@ -66,7 +70,7 @@ export const FabricCanvas = ({
       window.removeEventListener('resize', handleResize);
       canvas.dispose();
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!fabricCanvas) return;
