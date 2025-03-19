@@ -1,7 +1,6 @@
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, GraduationCap, Headphones, MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const courses = [
   {
@@ -50,7 +49,7 @@ const courses = [
   },
 ];
 
-export const CoursesList = ({ openContactDialog }) => {
+export const CoursesList = () => {
   return (
     <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
       {courses.map((course, index) => (
@@ -72,14 +71,6 @@ export const CoursesList = ({ openContactDialog }) => {
               ))}
             </ul>
           </CardContent>
-          <CardFooter>
-            <Button 
-              className={`w-full bg-gradient-to-r ${course.color} hover:opacity-90`}
-              onClick={openContactDialog}
-            >
-              Más Información
-            </Button>
-          </CardFooter>
         </Card>
       ))}
     </div>

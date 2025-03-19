@@ -1,8 +1,7 @@
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
-export const PricingInfo = ({ openContactDialog }) => {
+export const PricingInfo = () => {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <Card>
@@ -26,11 +25,6 @@ export const PricingInfo = ({ openContactDialog }) => {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button variant="outline" className="w-full" onClick={openContactDialog}>
-            Inscribirse Ahora
-          </Button>
-        </CardFooter>
       </Card>
 
       <Card>
@@ -54,9 +48,6 @@ export const PricingInfo = ({ openContactDialog }) => {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full" onClick={openContactDialog}>Reservar Clase Privada</Button>
-        </CardFooter>
       </Card>
 
       <Card className="md:col-span-2">
@@ -71,11 +62,6 @@ export const PricingInfo = ({ openContactDialog }) => {
             <li>Clase de prueba disponible a una tarifa reducida de $15 USD</li>
           </ul>
         </CardContent>
-        <CardFooter>
-          <Button variant="outline" className="w-full" onClick={openContactDialog}>
-            Contactar para Tarifas Especiales
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );
