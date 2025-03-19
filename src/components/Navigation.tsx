@@ -16,7 +16,8 @@ import {
   FileText, 
   GraduationCap, 
   LogOut,
-  LogIn
+  LogIn,
+  TestTube
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "./ui/button";
@@ -54,7 +55,7 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                       )}
                     >
                       <Home className="h-4 w-4" />
-                      {!isMobile && <span className="ml-2">All About Me</span>}
+                      {!isMobile && <span className="ml-2">Todo Sobre Mí</span>}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -85,6 +86,20 @@ export const Navigation = ({ isAuthenticated }: NavigationProps) => {
                 >
                   <GraduationCap className="h-4 w-4" />
                   {!isMobile && <span className="ml-2">Clases de Inglés</span>}
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            
+            <NavigationMenuItem>
+              <Link to="/english-test">
+                <NavigationMenuLink 
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    location.pathname === "/english-test" && "bg-accent text-accent-foreground"
+                  )}
+                >
+                  <TestTube className="h-4 w-4" />
+                  {!isMobile && <span className="ml-2">Test de Inglés</span>}
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>

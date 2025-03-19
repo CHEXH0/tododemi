@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { TestIntro } from "./test/TestIntro";
 import { QuestionCard } from "./test/QuestionCard";
@@ -79,23 +80,15 @@ export const EnglishLevelTest = ({ startExpanded = false }: EnglishLevelTestProp
 
   const startTest = () => {
     setShowTest(true);
-    setCurrentStep(0);
-    setAnswers({});
-    setResultLevel("");
-    setCorrectAnswerCount(0);
-    setLevelCounts({
-      A1: 0,
-      A2: 0,
-      B1: 0,
-      B2: 0,
-      C1: 0,
-      C2: 0,
-      "": 0
-    });
+    resetTest();
   };
 
   const restartTest = () => {
     setIsDialogOpen(false);
+    resetTest();
+  };
+
+  const resetTest = () => {
     setCurrentStep(0);
     setAnswers({});
     setResultLevel("");

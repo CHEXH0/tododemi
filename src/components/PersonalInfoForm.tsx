@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { FormData, PersonalInfoFormProps } from "./form/types";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +20,23 @@ export const PersonalInfoForm = ({
     hobbies: initialData?.hobbies || "",
     dreams: initialData?.dreams || "",
   });
+  
+  // Update form data when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name || "",
+        age: initialData.age || "",
+        country: initialData.country || "",
+        languages: initialData.languages || "",
+        hobbies: initialData.hobbies || "",
+        dreams: initialData.dreams || "",
+      });
+      if (onNameChange && initialData.name) {
+        onNameChange(initialData.name);
+      }
+    }
+  }, [initialData, onNameChange]);
 
   const { mediaContent, handleDrawingSave, handleImageUpload, handleImageRemove } = useFormMediaHandler(initialData?.canvas_data);
 
@@ -46,23 +63,29 @@ export const PersonalInfoForm = ({
       user_id: user.id,
     };
 
-    let { error } = initialData?.id 
-      ? await supabase
-          .from("submissions")
-          .update(submissionData)
-          .eq('id', initialData.id)
-      : await supabase
-          .from("submissions")
-          .insert(submissionData);
-
-    if (error) {
-      toast.error("Error al guardar el envío");
-      return;
-    }
-
-    toast.success(initialData?.id ? "¡Envío actualizado exitosamente!" : "¡Envío guardado exitosamente!");
-    if (onSubmissionComplete) {
-      onSubmissionComplete();
+    try {
+      let { error } = initialData?.id 
+        ? await supabase
+            .from("submissions")
+            .update(submissionData)
+            .eq('id', initialData.id)
+        : await supabase
+            .from("submissions")
+            .insert(submissionData);
+  
+      if (error) {
+        console.error("Error saving submission:", error);
+        toast.error("Error al guardar el envío");
+        return;
+      }
+  
+      toast.success(initialData?.id ? "¡Envío actualizado exitosamente!" : "¡Envío guardado exitosamente!");
+      if (onSubmissionComplete) {
+        onSubmissionComplete();
+      }
+    } catch (error) {
+      console.error("Exception when saving:", error);
+      toast.error("Error inesperado al guardar");
     }
   };
 
